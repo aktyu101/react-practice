@@ -7,6 +7,7 @@ export default function Input() {
     console.log("id", event.target.value);
   };
   const onChangeEmail = (event) => {
+    setEmail(event.target.value);
     console.log("e", event);
   };
   return (
@@ -17,7 +18,10 @@ export default function Input() {
       <div>
         <input id="email" type="text" value={email} onChange={onChangeEmail} />
       </div>
+      <div>
+        <p>{id}</p>
+        <p>{email}</p>
+      </div>
     </>
   );
 }
-//email값, 입력받은값을 화면에
