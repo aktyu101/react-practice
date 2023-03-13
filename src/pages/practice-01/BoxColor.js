@@ -31,24 +31,26 @@ export default function BoxColor() {
   };
 
   return (
-    <div style={{ display: "flex", gap: "5px", padding: "20px" }}>
-      <div
-        style={{ ...styles, backgroundColor: color1 }}
-        onClick={onChangeColor1}
-      >
-        1
-      </div>
-      <div
-        style={{ ...styles, backgroundColor: color2 }}
-        onClick={onChangeColor2}
-      >
-        2
-      </div>
-      <div
-        style={{ ...styles, backgroundColor: color3 }}
-        onClick={onChangeColor3}
-      >
-        3
+    <div id="content_wrapper">
+      <div style={{ display: "flex", gap: "5px" }}>
+        <div
+          style={{ ...styles, backgroundColor: color1 }}
+          onClick={onChangeColor1}
+        >
+          1
+        </div>
+        <div
+          style={{ ...styles, backgroundColor: color2 }}
+          onClick={onChangeColor2}
+        >
+          2
+        </div>
+        <div
+          style={{ ...styles, backgroundColor: color3 }}
+          onClick={onChangeColor3}
+        >
+          3
+        </div>
       </div>
     </div>
   );

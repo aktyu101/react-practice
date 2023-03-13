@@ -11,12 +11,24 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    children: [
+      {
+        path: "/input",
+        element: <Input />,
+        children: [{ path: ":id" }],
+      },
+      {
+        path: "/boxcolor",
+        element: <BoxColor />,
+        children: [{ path: ":id" }],
+      },
+    ],
   },
-  { path: "box-color", element: <BoxColor /> },
-  {
-    path: "input",
-    element: <Input />,
-  },
+  // { path: "box-color", element: <BoxColor /> },
+  // {
+  //   path: "input",
+  //   element: <Input />,
+  // },
 ]); //2
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
