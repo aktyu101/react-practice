@@ -17,6 +17,9 @@ export default function Navigation() {
             <Link to="/boxcolor" className="nav_tab">
               boxcolor
             </Link>
+            <Link to="/list" className="nav_tab">
+              list
+            </Link>
           </nav>
         </div>
       </header>

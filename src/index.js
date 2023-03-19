@@ -6,6 +6,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import BoxColor from "./pages/practice-01/BoxColor";
 import Input from "./pages/practice-02/Input";
+import List from "./pages/practice-03/List";
 
 const router = createBrowserRouter([
   {
@@ -15,12 +16,14 @@ const router = createBrowserRouter([
       {
         path: "/input",
         element: <Input />,
-        children: [{ path: ":id" }],
       },
       {
         path: "/boxcolor",
         element: <BoxColor />,
-        children: [{ path: ":id" }],
+      },
+      {
+        path: "/list",
+        element: <List />,
       },
     ],
   },
