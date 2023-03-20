@@ -18,7 +18,6 @@ const Input = styled.input`
   padding: 5px 10px;
   font-size: 12px;
 `;
-
 const InputWrapper = styled.div`
   display: flex;
   gap: 15px;
@@ -44,7 +43,7 @@ export default function List() {
     { id: 3, userName: "kevin", email: "kevin@gmail.com", active: true },
   ]);
   const changeColor = () => {
-    setColor("hotpink");
+    setColor(color === null ? "hotpink" : null);
   };
   const onChangeName = (event) => {
     setName(event.target.value);
@@ -63,6 +62,11 @@ export default function List() {
     setLists((lists) => {
       return [...lists, user];
     });
+    setName([]);
+    setEmail([]);
+  };
+  const clearList = () => {
+    setLists([]);
   };
   const titleStyle = css`
     color: red;
@@ -72,11 +76,11 @@ export default function List() {
       <h1 css={titleStyle}>list Render</h1>
       <InputWrapper>
         <div>
-          <label>name:</label>
+          <label>name: </label>
           <Input value={name} onChange={onChangeName} />
         </div>
         <div>
-          <label>email:</label>
+          <label>email: </label>
           <Input value={email} onChange={onChangeEmail} />
         </div>
         <button onClick={addUser}>add User</button>
@@ -86,14 +90,15 @@ export default function List() {
         {lists.map((list) => {
           return (
             <ListItem key={list.id} color={color}>
-              {list.userName}
+              id: {list.userName} <br />
+              email: {list.email}
             </ListItem>
           );
         })}
       </WrapListItem>
-      <button></button>
       <button onClick={changeColor}>changeColor</button>
+      <button onClick={clearList}>clear</button>
     </div>
   );
 }
-//과제 : 입력후 필드 초기화, 삭제, 수정
+//과제 : 입력후 필드 초기화0, 삭제0, 개별 삭제, 수정, 알럿(입력 안했을경우)
