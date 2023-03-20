@@ -6,11 +6,13 @@ const WrapListItem = styled.ul`
   justify-content: space-between;
 `;
 const ListItem = styled.li`
+  display: flex;
   width: 100%;
   border: 1px solid #ddd;
   padding: 20px;
   font-size: 15px;
   background-color: ${(props) => props.color};
+  gap: 10px;
 `;
 const Input = styled.input`
   border: 1px solid #ddd;
@@ -22,6 +24,17 @@ const InputWrapper = styled.div`
   display: flex;
   gap: 15px;
   margin-bottom: 15px;
+`;
+const CheckBox = styled.input`
+  margin-right: 10px;
+`;
+const Clear = styled.button`
+  width: 30px;
+  height: 20px;
+`;
+const Listspan = styled.span`
+  margin-right: 15px;
+  background-color: #fff;
 `;
 
 export default function List() {
@@ -65,7 +78,7 @@ export default function List() {
     setName([]);
     setEmail([]);
   };
-  const clearList = () => {
+  const AllClearList = () => {
     setLists([]);
   };
   const titleStyle = css`
@@ -89,15 +102,21 @@ export default function List() {
       <WrapListItem>
         {lists.map((list) => {
           return (
-            <ListItem key={list.id} color={color}>
-              id: {list.userName} <br />
-              email: {list.email}
-            </ListItem>
+            <>
+              <ListItem key={list.id} color={color}>
+                <CheckBox type="checkbox" />
+                <div>
+                  <Listspan>id: {list.userName}</Listspan>
+                  <Listspan>email: {list.email}</Listspan>
+                </div>
+                <Clear>x</Clear>
+              </ListItem>
+            </>
           );
         })}
       </WrapListItem>
       <button onClick={changeColor}>changeColor</button>
-      <button onClick={clearList}>clear</button>
+      <button onClick={AllClearList}>All clear</button>
     </div>
   );
 }
