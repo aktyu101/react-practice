@@ -51,9 +51,27 @@ export default function List() {
   //     background-color: ${color};
   //   `;
   const [lists, setLists] = useState([
-    { id: 1, userName: "judy", email: "judy@gmail.com", active: true },
-    { id: 2, userName: "nick", email: "nick@gmail.com", active: false },
-    { id: 3, userName: "kevin", email: "kevin@gmail.com", active: true },
+    {
+      id: 1,
+      userName: "judy",
+      email: "judy@gmail.com",
+      active: true,
+      checked: false,
+    },
+    {
+      id: 2,
+      userName: "nick",
+      email: "nick@gmail.com",
+      active: false,
+      checked: false,
+    },
+    {
+      id: 3,
+      userName: "kevin",
+      email: "kevin@gmail.com",
+      active: true,
+      checked: false,
+    },
   ]);
   const changeColor = () => {
     setColor(color === null ? "hotpink" : null);
@@ -64,13 +82,14 @@ export default function List() {
   const onChangeEmail = (event) => {
     setEmail(event.target.value);
   };
-
+  //유저추가
   const addUser = () => {
     const user = {
       id: lists.length + 1,
       userName: name,
       email: email,
       active: false,
+      checked: false,
     };
     setLists((lists) => {
       return [...lists, user];
@@ -78,9 +97,31 @@ export default function List() {
     setName([]);
     setEmail([]);
   };
+
   const AllClearList = () => {
     setLists([]);
   };
+  //체크확인
+  const handleCheckList = (event) => {
+    const id = Number(event.target.name);
+    const checked = event.target.checked;
+    setLists((lists) =>
+      lists.map((list, index) => {
+        return {
+          ...list,
+          checked: list.id === id ? checked : list.checked,
+        };
+      })
+    );
+  };
+  //선택삭제
+  const DeleteList = () => {
+    const noneChecked = lists
+      .filter((lists) => lists.checked === false)
+      .map((lists) => ({ ...lists }));
+    setLists(noneChecked);
+  };
+
   const titleStyle = css`
     color: red;
   `;
@@ -104,20 +145,25 @@ export default function List() {
           return (
             <>
               <ListItem key={list.id} color={color}>
-                <CheckBox type="checkbox" />
+                <CheckBox
+                  type="checkbox"
+                  onChange={handleCheckList}
+                  name={list.id}
+                />
                 <div>
                   <Listspan>id: {list.userName}</Listspan>
                   <Listspan>email: {list.email}</Listspan>
                 </div>
-                <Clear>x</Clear>
+                {/* <Clear>x</Clear> */}
               </ListItem>
             </>
           );
         })}
       </WrapListItem>
       <button onClick={changeColor}>changeColor</button>
-      <button onClick={AllClearList}>All clear</button>
+      <button onClick={AllClearList}>Delete All</button>
+      <button onClick={DeleteList}>Ddelete</button>
     </div>
   );
 }
-//과제 : 입력후 필드 초기화0, 삭제0, 개별 삭제, 수정, 알럿(입력 안했을경우)
+//과제 : 개별 삭제, 수정
