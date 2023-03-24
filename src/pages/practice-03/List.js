@@ -1,7 +1,8 @@
 import { css } from "@emotion/react"; // /css
 import { useState } from "react";
 import styled from "@emotion/styled";
-
+import { ClassNames } from "@emotion/react";
+//css
 const WrapListItem = styled.ul`
   justify-content: space-between;
 `;
@@ -13,6 +14,7 @@ const ListItem = styled.li`
   font-size: 15px;
   background-color: ${(props) => props.color};
   gap: 10px;
+  box-sizing: border-box;
 `;
 const Input = styled.input`
   border: 1px solid #ddd;
@@ -28,28 +30,43 @@ const InputWrapper = styled.div`
 const CheckBox = styled.input`
   margin-right: 10px;
 `;
-const Clear = styled.button`
+const Edit = styled.button`
+  width: 50px;
+  height: 25px;
+  background-color: #222;
+  color: #fff;
+  border-radius: 20px;
+  cursor: pointer;
+`;
+const ListChangeBtn = styled.button`
   width: 30px;
-  height: 20px;
+  height: 25px;
+  color: #222;
+  border-radius: 20px;
+  cursor: pointer;
 `;
 const Listspan = styled.span`
   margin-right: 15px;
   background-color: #fff;
 `;
+const EventBtn = styled.button`
+  width: 100px;
+  height: 35px;
+  margin-left: 5px;
+  margin-top: 10px;
+  background-color: #fff;
+  border: solid 1px #222;
+  cursor: pointer;
+  float: right;
+`;
+const titleStyle = css`
+  color: red;
+`;
 
 export default function List() {
   const [color, setColor] = useState("#fff");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("@gmail.com");
   const [name, setName] = useState("");
-  //   const listBaseStyles = css`
-  //     border: 1px solid #ddd;
-  //     padding: 20px;
-  //     font-size: 15px;
-  //   `;
-  //   const listStyles = css`
-  //     ${listBaseStyles}
-  //     background-color: ${color};
-  //   `;
   const [lists, setLists] = useState([
     {
       id: 1,
@@ -69,12 +86,12 @@ export default function List() {
       id: 3,
       userName: "kevin",
       email: "kevin@gmail.com",
-      active: true,
+      active: false,
       checked: false,
     },
   ]);
   const changeColor = () => {
-    setColor(color === null ? "hotpink" : null);
+    setColor(color === null ? "#eee" : null);
   };
   const onChangeName = (event) => {
     setName(event.target.value);
@@ -84,6 +101,7 @@ export default function List() {
   };
   //유저추가
   const addUser = () => {
+    console.log("email", email);
     const user = {
       id: lists.length + 1,
       userName: name,
@@ -97,7 +115,7 @@ export default function List() {
     setName([]);
     setEmail([]);
   };
-
+  //전체삭제
   const AllClearList = () => {
     setLists([]);
   };
@@ -122,9 +140,17 @@ export default function List() {
     setLists(noneChecked);
   };
 
-  const titleStyle = css`
-    color: red;
-  `;
+  //리스트수정
+  const editList = (event) => {
+    console.log("변경");
+  };
+
+  //변경
+  const active = lists.active;
+  console.log(lists);
+  //변경 적용
+  const listTextChange = () => {};
+
   return (
     <div id="content_wrapper">
       <h1 css={titleStyle}>list Render</h1>
@@ -150,20 +176,33 @@ export default function List() {
                   onChange={handleCheckList}
                   name={list.id}
                 />
-                <div>
-                  <Listspan>id: {list.userName}</Listspan>
-                  <Listspan>email: {list.email}</Listspan>
-                </div>
-                {/* <Clear>x</Clear> */}
+                {active ? (
+                  <ul style={{ display: "flex", gap: "10px" }}>
+                    <li>
+                      id: <input type="text" value={list.userName} />
+                    </li>
+                    <li>
+                      email: <input type="text" value={list.email} />
+                    </li>
+                    <ListChangeBtn onChange={listTextChange}>ok</ListChangeBtn>
+                  </ul>
+                ) : (
+                  <div>
+                    <Listspan>id: {list.userName}</Listspan>
+                    <Listspan>email: {list.email}</Listspan>
+                  </div>
+                )}
+                <Edit onChange={editList} name={list.id}>
+                  edit
+                </Edit>
               </ListItem>
             </>
           );
         })}
       </WrapListItem>
-      <button onClick={changeColor}>changeColor</button>
-      <button onClick={AllClearList}>Delete All</button>
-      <button onClick={DeleteList}>Ddelete</button>
+      <EventBtn onClick={changeColor}>changeColor</EventBtn>
+      <EventBtn onClick={AllClearList}>Delete All</EventBtn>
+      <EventBtn onClick={DeleteList}>Ddelete</EventBtn>
     </div>
   );
 }
-//과제 : 개별 삭제, 수정
