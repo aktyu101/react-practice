@@ -20,6 +20,12 @@ export default function Navigation() {
             <Link to="/list" className="nav_tab">
               list
             </Link>
+            <Link to="/chat" className="nav_tab">
+              chat
+            </Link>
+            <Link to="/counter" className="nav_tab">
+              counter
+            </Link>
           </nav>
         </div>
       </header>

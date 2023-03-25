@@ -7,6 +7,8 @@ import reportWebVitals from "./reportWebVitals";
 import BoxColor from "./pages/practice-01/BoxColor";
 import Input from "./pages/practice-02/Input";
 import List from "./pages/practice-03/List";
+import Chat from "./pages/practice-04/Chat";
+import Counter from "./pages/practice-04/Counter";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +26,14 @@ const router = createBrowserRouter([
       {
         path: "/list",
         element: <List />,
+      },
+      {
+        path: "/chat",
+        element: <Chat />,
+      },
+      {
+        path: "/counter",
+        element: <Counter />,
       },
     ],
   },

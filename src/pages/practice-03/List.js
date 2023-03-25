@@ -72,7 +72,7 @@ export default function List() {
       id: 1,
       userName: "judy",
       email: "judy@gmail.com",
-      active: true,
+      active: false,
       checked: false,
     },
     {
@@ -101,19 +101,24 @@ export default function List() {
   };
   //유저추가
   const addUser = () => {
-    console.log("email", email);
+    const trimName = name.trim();
+    const trimEmail = email.trim();
+    const isEmail = !!trimEmail.replace("@gmail.com", "");
+
+    if (!trimName || !isEmail) return;
+
     const user = {
       id: lists.length + 1,
-      userName: name,
-      email: email,
+      userName: trimName,
+      email: trimEmail,
       active: false,
       checked: false,
     };
     setLists((lists) => {
       return [...lists, user];
     });
-    setName([]);
-    setEmail([]);
+    setName("");
+    setEmail("@gmail.com");
   };
   //전체삭제
   const AllClearList = () => {
@@ -141,15 +146,49 @@ export default function List() {
   };
 
   //리스트수정
-  const editList = (event) => {
-    console.log("변경");
+  const editList = (index) => {
+    setLists((lists) => {
+      return [
+        ...lists.map((list, listIndex) => ({
+          ...list,
+          active: index === listIndex,
+        })),
+      ];
+    });
   };
-
-  //변경
-  const active = lists.active;
-  console.log(lists);
+  //name변경
+  const handleChangeName = (event, index) => {
+    setLists((lists) => {
+      return [
+        ...lists.map((list, listIndex) => ({
+          ...list,
+          userName: index === listIndex ? event.target.value : list.userName,
+        })),
+      ];
+    });
+  };
+  //email변경
+  const handleChangeEmail = (event, index) => {
+    setLists((lists) => {
+      return [
+        ...lists.map((list, listIndex) => ({
+          ...list,
+          email: index === listIndex ? event.target.value : list.email,
+        })),
+      ];
+    });
+  };
   //변경 적용
-  const listTextChange = () => {};
+  const listTextChange = (id) => {
+    setLists((lists) => {
+      return [
+        ...lists.map((list) => ({
+          ...list,
+          active: id === list.id ? false : list.active,
+        })),
+      ];
+    });
+  };
 
   return (
     <div id="content_wrapper">
@@ -167,36 +206,52 @@ export default function List() {
       </InputWrapper>
 
       <WrapListItem>
-        {lists.map((list) => {
+        {lists.map((list, index) => {
           return (
-            <>
-              <ListItem key={list.id} color={color}>
-                <CheckBox
-                  type="checkbox"
-                  onChange={handleCheckList}
-                  name={list.id}
-                />
-                {active ? (
-                  <ul style={{ display: "flex", gap: "10px" }}>
-                    <li>
-                      id: <input type="text" value={list.userName} />
-                    </li>
-                    <li>
-                      email: <input type="text" value={list.email} />
-                    </li>
-                    <ListChangeBtn onChange={listTextChange}>ok</ListChangeBtn>
-                  </ul>
-                ) : (
-                  <div>
-                    <Listspan>id: {list.userName}</Listspan>
-                    <Listspan>email: {list.email}</Listspan>
-                  </div>
-                )}
-                <Edit onChange={editList} name={list.id}>
-                  edit
-                </Edit>
-              </ListItem>
-            </>
+            <ListItem key={list.id} color={color}>
+              <CheckBox
+                type="checkbox"
+                onChange={handleCheckList}
+                name={list.id}
+              />
+              {list.active ? (
+                <ul style={{ display: "flex", gap: "10px" }}>
+                  <li>
+                    name:{" "}
+                    <input
+                      type="text"
+                      value={list.userName}
+                      onChange={(event) => handleChangeName(event, index)}
+                    />
+                  </li>
+                  <li>
+                    email:{" "}
+                    <input
+                      type="text"
+                      value={list.email}
+                      onChange={(event) => handleChangeEmail(event, index)}
+                    />
+                  </li>
+                  <ListChangeBtn onClick={() => listTextChange(list.id)}>
+                    ok
+                  </ListChangeBtn>
+                </ul>
+              ) : (
+                <div>
+                  <Listspan>name: {list.userName}</Listspan>
+                  <Listspan>email: {list.email}</Listspan>
+                </div>
+              )}
+
+              <Edit
+                onClick={() => {
+                  editList(index);
+                }}
+                name={list.id}
+              >
+                edit
+              </Edit>
+            </ListItem>
           );
         })}
       </WrapListItem>
