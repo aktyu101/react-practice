@@ -11,6 +11,9 @@ export default function Navigation() {
             </Link>
           </div>
           <nav style={{ display: "flex", gap: "10px" }}>
+            <Link to="/test" className="nav_tab">
+              test
+            </Link>
             <Link to="/input" className="nav_tab">
               input
             </Link>

@@ -4,17 +4,23 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom"; //1
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import Test from "./pages/practice-00/Test";
 import BoxColor from "./pages/practice-01/BoxColor";
 import Input from "./pages/practice-02/Input";
 import List from "./pages/practice-03/List";
 import Chat from "./pages/practice-04/Chat";
 import Counter from "./pages/practice-04/Counter";
+import styled from "@emotion/styled";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
+      {
+        path: "/test",
+        element: <Test />,
+      },
       {
         path: "/input",
         element: <Input />,
@@ -43,6 +49,13 @@ const router = createBrowserRouter([
   //   element: <Input />,
   // },
 ]); //2
+
+const StudyList = styled.li`
+  border: solid 1px #eee;
+  box-sizing: border-box;
+  padding: 0 10px;
+  line-height: 25px;
+`;
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

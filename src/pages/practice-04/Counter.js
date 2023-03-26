@@ -2,7 +2,7 @@ import { useState } from "react";
 export default function Counter() {
   const [count, setCount] = useState(0);
   return (
-    <>
+    <div id="content_wrapper">
       <div
         style={{
           display: "flex",
@@ -18,7 +18,7 @@ export default function Counter() {
           increment
         </button>
       </div>
-    </>
+    </div>
   );
 }
 
