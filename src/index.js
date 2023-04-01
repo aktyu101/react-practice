@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom"; //1
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import Test from "./pages/practice-00/Test";
+import Test01 from "./pages/practice-00/Test01";
 import BoxColor from "./pages/practice-01/BoxColor";
 import Input from "./pages/practice-02/Input";
 import List from "./pages/practice-03/List";
@@ -20,6 +21,12 @@ const router = createBrowserRouter([
       {
         path: "/test",
         element: <Test />,
+        children: [
+          {
+            path: ":test01",
+            element: <Test01 />,
+          },
+        ],
       },
       {
         path: "/input",
