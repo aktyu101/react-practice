@@ -12,13 +12,13 @@ const ChatContext = createContext(null);
 export default function Chat() {
   const [message, setMessage] = useState([]);
   return (
-    <>
+    <div id="content_wrapper">
       <ChatContext.Provider value={{ message, setMessage }}>
         <ChatUser1 />
         <ChatUser2 />
         {/* <ChatUser3 /> */}
       </ChatContext.Provider>
-    </>
+    </div>
   );
 }
 
