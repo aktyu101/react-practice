@@ -6,6 +6,7 @@ import {
   useEffect,
   useRef, //state가 변경되어 다시 돌더라도 초기화하지 않음, 값 유지 o, 렌더링 x
 } from "react";
+import styled from "@emotion/styled";
 
 const ChatContext = createContext(null);
 
@@ -21,6 +22,11 @@ export default function Chat() {
     </div>
   );
 }
+
+const ChatBox = styled.div`
+  width: 500px;
+  border: solid 1px #ddd;
+`;
 
 function ChatUser1() {
   const id = useId();
@@ -70,7 +76,7 @@ function ChatUser1() {
     });
   };
   return (
-    <>
+    <div>
       <ul>
         {context?.message.map((msg, index) => (
           <li key={index}>
@@ -90,7 +96,7 @@ function ChatUser1() {
         value={input}
         onChange={onChange}
       />
-    </>
+    </div>
   );
 }
 
@@ -105,7 +111,15 @@ function ChatUser2() {
     if (event.keyCode === 13) {
       console.log("key event", event.target.value);
       context?.setMessage((message) => {
-        return [...message, { id, message: event.target.value }];
+        const date = new Date();
+        return [
+          ...message,
+          {
+            id,
+            message: event.target.value,
+            date: new Intl.DateTimeFormat("ko-KR").format(date),
+          },
+        ];
         // return {
         //   ...message,
         //   [id]: [...(message[id] ?? []), event.target.value],
@@ -116,15 +130,21 @@ function ChatUser2() {
       setInput("");
     }
   };
+
   const onChange = (event) => {
     setInput(event.target.value);
   };
   const onDelete = (index) => {
-    console.log("index", index);
+    console.log("deleteindex", index);
+    context?.setMessage((message) => {
+      const msg = [...message];
+      msg.splice(index, 1);
+      return msg;
+    });
   };
 
   return (
-    <>
+    <div>
       <ul>
         {context?.message.map((msg, index) => (
           <li key={index}>
@@ -141,7 +161,7 @@ function ChatUser2() {
         value={input}
         onChange={onChange}
       />
-    </>
+    </div>
   );
 }
 
