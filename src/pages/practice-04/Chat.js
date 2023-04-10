@@ -13,7 +13,14 @@ const ChatContext = createContext(null);
 export default function Chat() {
   const [message, setMessage] = useState([]);
   return (
-    <div id="content_wrapper">
+    <div
+      id="content_wrapper"
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        gap: "10px",
+      }}
+    >
       <ChatContext.Provider value={{ message, setMessage }}>
         <ChatUser1 />
         <ChatUser2 />
@@ -26,8 +33,32 @@ export default function Chat() {
 const ChatBox = styled.div`
   width: 500px;
   border: solid 1px #ddd;
+  height: 700px;
+  position: relative;
+  padding: 20px;
+  box-sizing: border-box;
 `;
-
+const InputBox = styled.input`
+  width: 500px;
+  text-indent: 10px;
+  box-sizing: border-box;
+  line-height: 35px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+`;
+const ChatList = styled.li`
+  display: flex;
+  justify-content: flex-srart;
+  gap: 15px;
+`;
+const ChatMsg = styled.div`
+  background-color: #eee;
+  border-radius: 5px;
+  line-height: 35px;
+  padding: 0 10px;
+  margin-bottom: 5px;
+`;
 function ChatUser1() {
   const id = useId();
   const context = useContext(ChatContext);
@@ -76,27 +107,27 @@ function ChatUser1() {
     });
   };
   return (
-    <div>
+    <ChatBox>
       <ul>
         {context?.message.map((msg, index) => (
-          <li key={index}>
-            <div>
+          <ChatList key={index}>
+            <ChatMsg>
               {msg.id}: {msg.message}
-              {id === msg.id && (
-                <button onClick={() => onDelete(index)}>X</button>
-              )}
-            </div>
+            </ChatMsg>
             <div>{msg.date}</div>
-          </li>
+            {id === msg.id && (
+              <button onClick={() => onDelete(index)}>X</button>
+            )}
+          </ChatList>
         ))}
       </ul>
-      <input
+      <InputBox
         type="text"
         onKeyDown={onKeyDown}
         value={input}
         onChange={onChange}
       />
-    </div>
+    </ChatBox>
   );
 }
 
@@ -130,7 +161,6 @@ function ChatUser2() {
       setInput("");
     }
   };
-
   const onChange = (event) => {
     setInput(event.target.value);
   };
@@ -144,24 +174,27 @@ function ChatUser2() {
   };
 
   return (
-    <div>
+    <ChatBox>
       <ul>
         {context?.message.map((msg, index) => (
-          <li key={index}>
-            {msg.id}: {msg.message}
+          <ChatList key={index}>
+            <ChatMsg>
+              {msg.id}: {msg.message}
+            </ChatMsg>
+            <div>{msg.date}</div>
             {id === msg.id && (
               <button onClick={() => onDelete(index)}>X</button>
             )}
-          </li>
+          </ChatList>
         ))}
       </ul>
-      <input
+      <InputBox
         type="text"
         onKeyDown={onKeyDown}
         value={input}
         onChange={onChange}
       />
-    </div>
+    </ChatBox>
   );
 }
 
