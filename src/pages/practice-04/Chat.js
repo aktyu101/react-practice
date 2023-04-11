@@ -37,15 +37,20 @@ const ChatBox = styled.div`
   position: relative;
   padding: 20px;
   box-sizing: border-box;
+  border-radius: 30px;
 `;
 const InputBox = styled.input`
-  width: 500px;
+  width: 488px;
   text-indent: 10px;
   box-sizing: border-box;
-  line-height: 35px;
+  line-height: 45px;
   position: absolute;
   bottom: 0;
   left: 0;
+  border: none;
+  background: #eee;
+  border-radius: 30px;
+  margin: 5px;
 `;
 const ChatList = styled.li`
   display: flex;
@@ -117,13 +122,10 @@ function ChatUser1() {
       return msg;
     });
   };
-  // const reverseAlign = (msg, index) => {
-  //   if (index === msg.id) return { justifyContent: "flex-end" };
-  // };
   return (
     <ChatBox>
       <h2 style={{ marginBottom: "20px" }}>user1</h2>
-      <ul>
+      <ul style={{ height: "550px", overflowY: "scroll" }}>
         {context?.message.map((msg, index) => (
           <ChatList key={index}>
             {/* style={reverseAlign} */}
@@ -194,7 +196,7 @@ function ChatUser2() {
   return (
     <ChatBox>
       <h2 style={{ marginBottom: "20px" }}>user2</h2>
-      <ul>
+      <ul style={{ height: "550px", overflowY: "scroll" }}>
         {context?.message.map((msg, index) => (
           <ChatList key={index}>
             <ChatMsg>
