@@ -53,11 +53,22 @@ const ChatList = styled.li`
   gap: 15px;
 `;
 const ChatMsg = styled.div`
-  background-color: #eee;
-  border-radius: 5px;
+  background-color: #f5f5f5;
+  border-radius: 30px;
   line-height: 35px;
   padding: 0 10px;
   margin-bottom: 5px;
+`;
+const ChatDate = styled.div`
+  font-size: 11px;
+  line-height: 35px;
+  color: #666;
+`;
+const DelBtn = styled.button`
+  font-size: 10px;
+  padding: 5px;
+  border: none;
+  cursor: pointer;
 `;
 function ChatUser1() {
   const id = useId();
@@ -106,18 +117,25 @@ function ChatUser1() {
       return msg;
     });
   };
+  // const reverseAlign = (msg, index) => {
+  //   if (index === msg.id) return { justifyContent: "flex-end" };
+  // };
   return (
     <ChatBox>
+      <h2 style={{ marginBottom: "20px" }}>user1</h2>
       <ul>
         {context?.message.map((msg, index) => (
           <ChatList key={index}>
+            {/* style={reverseAlign} */}
             <ChatMsg>
               {msg.id}: {msg.message}
             </ChatMsg>
-            <div>{msg.date}</div>
-            {id === msg.id && (
-              <button onClick={() => onDelete(index)}>X</button>
-            )}
+            <ChatDate>
+              {msg.date}
+              {id === msg.id && (
+                <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
+              )}
+            </ChatDate>
           </ChatList>
         ))}
       </ul>
@@ -175,16 +193,19 @@ function ChatUser2() {
 
   return (
     <ChatBox>
+      <h2 style={{ marginBottom: "20px" }}>user2</h2>
       <ul>
         {context?.message.map((msg, index) => (
           <ChatList key={index}>
             <ChatMsg>
               {msg.id}: {msg.message}
             </ChatMsg>
-            <div>{msg.date}</div>
-            {id === msg.id && (
-              <button onClick={() => onDelete(index)}>X</button>
-            )}
+            <ChatDate>
+              {msg.date}
+              {id === msg.id && (
+                <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
+              )}
+            </ChatDate>
           </ChatList>
         ))}
       </ul>
