@@ -31,7 +31,7 @@ export default function Chat() {
 }
 
 const ChatBox = styled.div`
-  width: 500px;
+  width: 800px;
   border: solid 1px #ddd;
   height: 700px;
   position: relative;
@@ -40,7 +40,7 @@ const ChatBox = styled.div`
   border-radius: 30px;
 `;
 const InputBox = styled.input`
-  width: 488px;
+  width: 640px;
   text-indent: 10px;
   box-sizing: border-box;
   line-height: 45px;
@@ -61,8 +61,10 @@ const ChatMsg = styled.div`
   background-color: #f5f5f5;
   border-radius: 30px;
   line-height: 35px;
-  padding: 0 10px;
+  padding: 5px 10px;
   margin-bottom: 5px;
+  word-break:break-all;
+  max-width: 400px;
 `;
 const ChatDate = styled.div`
   font-size: 11px;
@@ -74,7 +76,18 @@ const DelBtn = styled.button`
   padding: 5px;
   border: none;
   cursor: pointer;
+  margin-left: 5px;
 `;
+const UserName = styled.div`
+line-height: 30px;
+width: 33px;
+height: 33px;
+border-radius: 50%;
+border: solid 1px #222;
+text-align: center;
+box-sizing: border-box;
+
+`
 function ChatUser1() {
   const id = useId();
   const context = useContext(ChatContext);
@@ -88,6 +101,7 @@ function ChatUser1() {
 
   const onKeyDown = (event) => {
     if (event.keyCode === 13) {
+      //공백포함 빈 값일경우 미반환처리
       console.log("key event", event.target.value);
       const date = new Date();
       context?.setMessage((message) => {
@@ -127,10 +141,10 @@ function ChatUser1() {
       <h2 style={{ marginBottom: "20px" }}>user1</h2>
       <ul style={{ height: "550px", overflowY: "scroll" }}>
         {context?.message.map((msg, index) => (
-          <ChatList key={index}>
-            {/* style={reverseAlign} */}
+          <ChatList key={index} style={id===msg.id ? {justifyContent:"flex-end"}:{justifyContent:"flex-start"}}>
+            <UserName>{msg.id}</UserName>
             <ChatMsg>
-              {msg.id}: {msg.message}
+              {msg.message}
             </ChatMsg>
             <ChatDate>
               {msg.date}
@@ -198,9 +212,10 @@ function ChatUser2() {
       <h2 style={{ marginBottom: "20px" }}>user2</h2>
       <ul style={{ height: "550px", overflowY: "scroll" }}>
         {context?.message.map((msg, index) => (
-          <ChatList key={index}>
+          <ChatList key={index} style={id===msg.id ? {justifyContent:"flex-end"}:{justifyContent:"flex-start"}}>
+            <UserName>{msg.id}</UserName>
             <ChatMsg>
-              {msg.id}: {msg.message}
+              {msg.message}
             </ChatMsg>
             <ChatDate>
               {msg.date}
