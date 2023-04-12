@@ -52,6 +52,19 @@ const InputBox = styled.input`
   border-radius: 30px;
   margin: 5px;
 `;
+const MsgLog = styled.ul`
+  height: 550px;
+  overflow-y: auto;
+  padding-right: 5px; 
+  &::-webkit-scrollbar {
+    width: 2px;
+    background: #eee;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background: #222;
+  }
+`;
 const ChatList = styled.li`
   display: flex;
   justify-content: flex-srart;
@@ -79,14 +92,12 @@ const DelBtn = styled.button`
   margin-left: 5px;
 `;
 const UserName = styled.div`
-line-height: 30px;
-width: 33px;
 height: 33px;
+line-height: 30px;
 border-radius: 50%;
 border: solid 1px #222;
 text-align: center;
 box-sizing: border-box;
-
 `
 function ChatUser1() {
   const id = useId();
@@ -139,7 +150,7 @@ function ChatUser1() {
   return (
     <ChatBox>
       <h2 style={{ marginBottom: "20px" }}>user1</h2>
-      <ul style={{ height: "550px", overflowY: "scroll" }}>
+      <MsgLog>
         {context?.message.map((msg, index) => (
           <ChatList key={index} style={id===msg.id ? {justifyContent:"flex-end"}:{justifyContent:"flex-start"}}>
             <UserName>{msg.id}</UserName>
@@ -154,7 +165,7 @@ function ChatUser1() {
             </ChatDate>
           </ChatList>
         ))}
-      </ul>
+      </MsgLog>
       <InputBox
         type="text"
         onKeyDown={onKeyDown}
@@ -210,7 +221,7 @@ function ChatUser2() {
   return (
     <ChatBox>
       <h2 style={{ marginBottom: "20px" }}>user2</h2>
-      <ul style={{ height: "550px", overflowY: "scroll" }}>
+      <MsgLog>
         {context?.message.map((msg, index) => (
           <ChatList key={index} style={id===msg.id ? {justifyContent:"flex-end"}:{justifyContent:"flex-start"}}>
             <UserName>{msg.id}</UserName>
@@ -225,7 +236,7 @@ function ChatUser2() {
             </ChatDate>
           </ChatList>
         ))}
-      </ul>
+      </MsgLog>
       <InputBox
         type="text"
         onKeyDown={onKeyDown}
