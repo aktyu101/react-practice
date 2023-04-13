@@ -69,6 +69,7 @@ const ChatList = styled.li`
   display: flex;
   justify-content: flex-srart;
   gap: 15px;
+  align-items: baseline;
 `;
 const ChatMsg = styled.div`
   background-color: #f5f5f5;
@@ -96,6 +97,14 @@ height: 33px;
 line-height: 30px;
 text-align: center;
 box-sizing: border-box;
+`
+const SubmitBtn = styled.button`
+width: 50px;
+text-align: center;
+height: 33px;
+border: none;
+background-color: #000;
+color: #fff;
 `
 function ChatUser1() {
   const id = useId();
@@ -150,17 +159,18 @@ function ChatUser1() {
       <h2 style={{ marginBottom: "20px" }}>user1</h2>
       <MsgLog>
         {context?.message.map((msg, index) => (
-          <ChatList key={index} style={id===msg.id ? {justifyContent:"flex-end"}:{justifyContent:"flex-start"}}>
+          <ChatList key={index} style={id===msg.id ? {flexDirection:"row-reverse"}:{justifyContent:"flex-start"}}>
             <UserName>{id===msg.id ? null: msg.id}</UserName>
             <ChatMsg>
               {msg.message}
             </ChatMsg>
             <ChatDate>
               {msg.date}
-              {id === msg.id && (
+              
+            </ChatDate>
+            {id === msg.id && (
                 <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
               )}
-            </ChatDate>
           </ChatList>
         ))}
       </MsgLog>
@@ -170,6 +180,7 @@ function ChatUser1() {
         value={input}
         onChange={onChange}
       />
+      <SubmitBtn>전송</SubmitBtn>     
     </ChatBox>
   );
 }
@@ -221,17 +232,17 @@ function ChatUser2() {
       <h2 style={{ marginBottom: "20px" }}>user2</h2>
       <MsgLog>
         {context?.message.map((msg, index) => (
-          <ChatList key={index} style={id===msg.id ? {justifyContent:"flex-end"}:{justifyContent:"flex-start"}}>
+          <ChatList key={index} style={id===msg.id ? {flexDirection:"row-reverse"}:{justifyContent:"flex-start"}}>
             <UserName>{id===msg.id ? null: msg.id}</UserName>
             <ChatMsg>
               {msg.message}
             </ChatMsg>
             <ChatDate>
               {msg.date}
-              {id === msg.id && (
+            </ChatDate>
+            {id === msg.id && (
                 <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
               )}
-            </ChatDate>
           </ChatList>
         ))}
       </MsgLog>
@@ -241,6 +252,7 @@ function ChatUser2() {
         value={input}
         onChange={onChange}
       />
+      <SubmitBtn>전송</SubmitBtn>     
     </ChatBox>
   );
 }
