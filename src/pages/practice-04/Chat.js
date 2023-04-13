@@ -94,8 +94,6 @@ const DelBtn = styled.button`
 const UserName = styled.div`
 height: 33px;
 line-height: 30px;
-border-radius: 50%;
-border: solid 1px #222;
 text-align: center;
 box-sizing: border-box;
 `
@@ -153,7 +151,7 @@ function ChatUser1() {
       <MsgLog>
         {context?.message.map((msg, index) => (
           <ChatList key={index} style={id===msg.id ? {justifyContent:"flex-end"}:{justifyContent:"flex-start"}}>
-            <UserName>{msg.id}</UserName>
+            <UserName>{id===msg.id ? null: msg.id}</UserName>
             <ChatMsg>
               {msg.message}
             </ChatMsg>
@@ -224,7 +222,7 @@ function ChatUser2() {
       <MsgLog>
         {context?.message.map((msg, index) => (
           <ChatList key={index} style={id===msg.id ? {justifyContent:"flex-end"}:{justifyContent:"flex-start"}}>
-            <UserName>{msg.id}</UserName>
+            <UserName>{id===msg.id ? null: msg.id}</UserName>
             <ChatMsg>
               {msg.message}
             </ChatMsg>
