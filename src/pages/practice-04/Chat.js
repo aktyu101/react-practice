@@ -37,8 +37,7 @@ const ChatBox = styled.div`
   position: relative;
   padding: 20px;
   box-sizing: border-box;
-  border-radius: 5px;
-  background-color: #222;
+  border-radius: 30px;
 `;
 const InputBox = styled.input`
   width: 640px;
@@ -50,7 +49,7 @@ const InputBox = styled.input`
   left: 0;
   border: none;
   background: #eee;
-  border-radius: 5px;
+  border-radius: 30px;
   margin: 5px;
 `;
 const MsgLog = styled.ul`
@@ -73,14 +72,13 @@ const ChatList = styled.li`
   align-items: baseline;
 `;
 const ChatMsg = styled.div`
-  background-color: #ffffff11;
-  border-radius: 5px;
+  background-color: #f5f5f5;
+  border-radius: 30px;
   line-height: 35px;
   padding: 5px 10px;
   margin-bottom: 5px;
   word-break: break-all;
   max-width: 400px;
-  color: #fff;
 `;
 const ChatDate = styled.div`
   font-size: 11px;
@@ -99,7 +97,6 @@ const UserName = styled.div`
   line-height: 30px;
   text-align: center;
   box-sizing: border-box;
-  color: #fff;
 `;
 const SubmitBtn = styled.button`
   width: 50px;
@@ -159,7 +156,7 @@ function ChatUser1() {
   };
   return (
     <ChatBox>
-      <h2 style={{ marginBottom: "20px", color: "#fff" }}>user1</h2>
+      <h2 style={{ marginBottom: "20px" }}>user1</h2>
       <MsgLog>
         {context?.message.map((msg, index) => (
           <ChatList
@@ -179,15 +176,13 @@ function ChatUser1() {
           </ChatList>
         ))}
       </MsgLog>
-      <div style={{ display: "felx" }}>
-        <InputBox
-          type="text"
-          onKeyDown={onKeyDown}
-          value={input}
-          onChange={onChange}
-        />
-        {/* <SubmitBtn>전송</SubmitBtn> */}
-      </div>
+      <InputBox
+        type="text"
+        onKeyDown={onKeyDown}
+        value={input}
+        onChange={onChange}
+      />
+      <SubmitBtn>전송</SubmitBtn>
     </ChatBox>
   );
 }
@@ -236,7 +231,7 @@ function ChatUser2() {
 
   return (
     <ChatBox>
-      <h2 style={{ marginBottom: "20px", color: "#fff" }}>user2</h2>
+      <h2 style={{ marginBottom: "20px" }}>user2</h2>
       <MsgLog>
         {context?.message.map((msg, index) => (
           <ChatList
@@ -262,7 +257,7 @@ function ChatUser2() {
         value={input}
         onChange={onChange}
       />
-      {/* <SubmitBtn>전송</SubmitBtn> */}
+      <SubmitBtn>전송</SubmitBtn>
     </ChatBox>
   );
 }
