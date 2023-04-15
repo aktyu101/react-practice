@@ -31,16 +31,17 @@ export default function Chat() {
 }
 
 const ChatBox = styled.div`
-  width: 500px;
+  width: 800px;
   border: solid 1px #ddd;
   height: 700px;
   position: relative;
   padding: 20px;
   box-sizing: border-box;
-  border-radius: 30px;
+  border-radius: 5px;
+  background-color: #222;
 `;
 const InputBox = styled.input`
-  width: 488px;
+  width: 640px;
   text-indent: 10px;
   box-sizing: border-box;
   line-height: 45px;
@@ -49,20 +50,37 @@ const InputBox = styled.input`
   left: 0;
   border: none;
   background: #eee;
-  border-radius: 30px;
+  border-radius: 5px;
   margin: 5px;
+`;
+const MsgLog = styled.ul`
+  height: 550px;
+  overflow-y: auto;
+  padding-right: 5px;
+  &::-webkit-scrollbar {
+    width: 2px;
+    background: #eee;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background: #222;
+  }
 `;
 const ChatList = styled.li`
   display: flex;
   justify-content: flex-srart;
   gap: 15px;
+  align-items: baseline;
 `;
 const ChatMsg = styled.div`
-  background-color: #f5f5f5;
-  border-radius: 30px;
+  background-color: #ffffff11;
+  border-radius: 5px;
   line-height: 35px;
-  padding: 0 10px;
+  padding: 5px 10px;
   margin-bottom: 5px;
+  word-break: break-all;
+  max-width: 400px;
+  color: #fff;
 `;
 const ChatDate = styled.div`
   font-size: 11px;
@@ -74,6 +92,22 @@ const DelBtn = styled.button`
   padding: 5px;
   border: none;
   cursor: pointer;
+  margin-left: 5px;
+`;
+const UserName = styled.div`
+  height: 33px;
+  line-height: 30px;
+  text-align: center;
+  box-sizing: border-box;
+  color: #fff;
+`;
+const SubmitBtn = styled.button`
+  width: 50px;
+  text-align: center;
+  height: 33px;
+  border: none;
+  background-color: #000;
+  color: #fff;
 `;
 function ChatUser1() {
   const id = useId();
@@ -88,6 +122,7 @@ function ChatUser1() {
 
   const onKeyDown = (event) => {
     if (event.keyCode === 13) {
+      //공백포함 빈 값일경우 미반환처리
       console.log("key event", event.target.value);
       const date = new Date();
       context?.setMessage((message) => {
@@ -124,29 +159,35 @@ function ChatUser1() {
   };
   return (
     <ChatBox>
-      <h2 style={{ marginBottom: "20px" }}>user1</h2>
-      <ul style={{ height: "550px", overflowY: "scroll" }}>
+      <h2 style={{ marginBottom: "20px", color: "#fff" }}>user1</h2>
+      <MsgLog>
         {context?.message.map((msg, index) => (
-          <ChatList key={index}>
-            {/* style={reverseAlign} */}
-            <ChatMsg>
-              {msg.id}: {msg.message}
-            </ChatMsg>
-            <ChatDate>
-              {msg.date}
-              {id === msg.id && (
-                <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
-              )}
-            </ChatDate>
+          <ChatList
+            key={index}
+            style={
+              id === msg.id
+                ? { flexDirection: "row-reverse" }
+                : { justifyContent: "flex-start" }
+            }
+          >
+            <UserName>{id === msg.id ? null : msg.id}</UserName>
+            <ChatMsg>{msg.message}</ChatMsg>
+            <ChatDate>{msg.date}</ChatDate>
+            {id === msg.id && (
+              <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
+            )}
           </ChatList>
         ))}
-      </ul>
-      <InputBox
-        type="text"
-        onKeyDown={onKeyDown}
-        value={input}
-        onChange={onChange}
-      />
+      </MsgLog>
+      <div style={{ display: "felx" }}>
+        <InputBox
+          type="text"
+          onKeyDown={onKeyDown}
+          value={input}
+          onChange={onChange}
+        />
+        {/* <SubmitBtn>전송</SubmitBtn> */}
+      </div>
     </ChatBox>
   );
 }
@@ -195,28 +236,33 @@ function ChatUser2() {
 
   return (
     <ChatBox>
-      <h2 style={{ marginBottom: "20px" }}>user2</h2>
-      <ul style={{ height: "550px", overflowY: "scroll" }}>
+      <h2 style={{ marginBottom: "20px", color: "#fff" }}>user2</h2>
+      <MsgLog>
         {context?.message.map((msg, index) => (
-          <ChatList key={index}>
-            <ChatMsg>
-              {msg.id}: {msg.message}
-            </ChatMsg>
-            <ChatDate>
-              {msg.date}
-              {id === msg.id && (
-                <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
-              )}
-            </ChatDate>
+          <ChatList
+            key={index}
+            style={
+              id === msg.id
+                ? { flexDirection: "row-reverse" }
+                : { justifyContent: "flex-start" }
+            }
+          >
+            <UserName>{id === msg.id ? null : msg.id}</UserName>
+            <ChatMsg>{msg.message}</ChatMsg>
+            <ChatDate>{msg.date}</ChatDate>
+            {id === msg.id && (
+              <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
+            )}
           </ChatList>
         ))}
-      </ul>
+      </MsgLog>
       <InputBox
         type="text"
         onKeyDown={onKeyDown}
         value={input}
         onChange={onChange}
       />
+      {/* <SubmitBtn>전송</SubmitBtn> */}
     </ChatBox>
   );
 }
