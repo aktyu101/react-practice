@@ -13,20 +13,30 @@ const ChatContext = createContext(null);
 export default function Chat() {
   const [message, setMessage] = useState([]);
   return (
-    <div
-      id="content_wrapper"
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        gap: "10px",
-      }}
-    >
-      <ChatContext.Provider value={{ message, setMessage }}>
-        <ChatUser1 />
-        <ChatUser2 />
-        {/* <ChatUser3 /> */}
-      </ChatContext.Provider>
-    </div>
+    <>
+      <div>
+        <p>공백일경우! 엔터 작동 안하게</p>
+        <p>입력버튼 추가</p>
+        <p>
+          보낸시간에서 10초가 지나지 않았을 경우 -알럿 노출 / 지났을 경우 - 삭제
+          가능
+        </p>
+      </div>
+      <div
+        id="content_wrapper"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "10px",
+        }}
+      >
+        <ChatContext.Provider value={{ message, setMessage }}>
+          <ChatUser1 />
+          <ChatUser2 />
+          {/* <ChatUser3 /> */}
+        </ChatContext.Provider>
+      </div>
+    </>
   );
 }
 
@@ -77,7 +87,7 @@ const ChatMsg = styled.div`
   padding: 5px 10px;
   margin-bottom: 5px;
   word-break: break-all;
-  max-width: 400px;
+  max-width: 380px;
   color: #222;
   border-radius: 0px 10px 10px 10px;
 `;
@@ -96,11 +106,14 @@ const DelBtn = styled.button`
   background-color: #065fd499;
 `;
 const UserName = styled.div`
-  height: 33px;
   line-height: 30px;
   text-align: center;
   box-sizing: border-box;
   color: #222;
+  width: 35px;
+  height: 35px;
+  border: solid 1px #eee;
+  border-radius: 50%;
 `;
 const SubmitBtn = styled.button`
   width: 50px;
@@ -130,22 +143,14 @@ function ChatUser1() {
       let minute = date.getMinutes();
       let second = date.getSeconds();
       const ampm = hour <= 12 ? "오전" : "오후";
+      const time = " " + ampm + " " + hour + ":" + minute + ":" + second;
       context?.setMessage((message) => {
         return [
           ...message,
           {
             id,
             message: event.target.value,
-            date:
-              new Intl.DateTimeFormat("ko-KR").format(date) +
-              " " +
-              ampm +
-              " " +
-              hour +
-              ":" +
-              minute +
-              ":" +
-              second,
+            date: new Intl.DateTimeFormat("ko-KR").format(date) + time,
           },
         ];
         // return {
@@ -184,7 +189,11 @@ function ChatUser1() {
                 : { justifyContent: "flex-start" }
             }
           >
-            <UserName>{id === msg.id ? null : msg.id}</UserName>
+            <UserName
+              style={id === msg.id ? { display: "none" } : { display: "block" }}
+            >
+              {id === msg.id ? null : msg.id}
+            </UserName>
             <ChatMsg
               style={id === msg.id ? { borderRadius: "10px 0 10px 10px" } : {}}
             >
@@ -222,14 +231,19 @@ function ChatUser2() {
   const onKeyDown = (event) => {
     if (event.keyCode === 13) {
       console.log("key event", event.target.value);
+      const date = new Date();
+      let hour = date.getHours();
+      let minute = date.getMinutes();
+      let second = date.getSeconds();
+      const ampm = hour <= 12 ? "오전" : "오후";
+      const time = " " + ampm + " " + hour + ":" + minute + ":" + second;
       context?.setMessage((message) => {
-        const date = new Date();
         return [
           ...message,
           {
             id,
             message: event.target.value,
-            date: new Intl.DateTimeFormat("ko-KR").format(date),
+            date: new Intl.DateTimeFormat("ko-KR").format(date) + time,
           },
         ];
         // return {
@@ -267,8 +281,16 @@ function ChatUser2() {
                 : { justifyContent: "flex-start" }
             }
           >
-            <UserName>{id === msg.id ? null : msg.id}</UserName>
-            <ChatMsg>{msg.message}</ChatMsg>
+            <UserName
+              style={id === msg.id ? { display: "none" } : { display: "block" }}
+            >
+              {id === msg.id ? null : msg.id}
+            </UserName>
+            <ChatMsg
+              style={id === msg.id ? { borderRadius: "10px 0 10px 10px" } : {}}
+            >
+              {msg.message}
+            </ChatMsg>
             <ChatDate>{msg.date}</ChatDate>
             {id === msg.id && (
               <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
