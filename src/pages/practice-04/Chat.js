@@ -37,20 +37,20 @@ const ChatBox = styled.div`
   position: relative;
   padding: 20px;
   box-sizing: border-box;
-  border-radius: 30px;
+  border-radius: 5px;
+  background-color: #fff;
 `;
 const InputBox = styled.input`
-  width: 640px;
+  width: 100%;
   text-indent: 10px;
   box-sizing: border-box;
   line-height: 45px;
   position: absolute;
   bottom: 0;
   left: 0;
-  border: none;
   background: #eee;
-  border-radius: 30px;
-  margin: 5px;
+  outline: none;
+  border: none;
 `;
 const MsgLog = styled.ul`
   height: 550px;
@@ -62,7 +62,7 @@ const MsgLog = styled.ul`
   }
   &::-webkit-scrollbar-thumb {
     border-radius: 2px;
-    background: #222;
+    background: #666;
   }
 `;
 const ChatList = styled.li`
@@ -72,18 +72,19 @@ const ChatList = styled.li`
   align-items: baseline;
 `;
 const ChatMsg = styled.div`
-  background-color: #f5f5f5;
-  border-radius: 30px;
+  background-color: #eee;
   line-height: 35px;
   padding: 5px 10px;
   margin-bottom: 5px;
   word-break: break-all;
   max-width: 400px;
+  color: #222;
+  border-radius: 0px 10px 10px 10px;
 `;
 const ChatDate = styled.div`
   font-size: 11px;
   line-height: 35px;
-  color: #666;
+  color: #6b6b6b;
 `;
 const DelBtn = styled.button`
   font-size: 10px;
@@ -91,19 +92,22 @@ const DelBtn = styled.button`
   border: none;
   cursor: pointer;
   margin-left: 5px;
+  color: #fff;
+  background-color: #065fd499;
 `;
 const UserName = styled.div`
   height: 33px;
   line-height: 30px;
   text-align: center;
   box-sizing: border-box;
+  color: #222;
 `;
 const SubmitBtn = styled.button`
   width: 50px;
   text-align: center;
   height: 33px;
   border: none;
-  background-color: #000;
+  background-color: #111;
   color: #fff;
 `;
 function ChatUser1() {
@@ -122,13 +126,26 @@ function ChatUser1() {
       //공백포함 빈 값일경우 미반환처리
       console.log("key event", event.target.value);
       const date = new Date();
+      let hour = date.getHours();
+      let minute = date.getMinutes();
+      let second = date.getSeconds();
+      const ampm = hour <= 12 ? "오전" : "오후";
       context?.setMessage((message) => {
         return [
           ...message,
           {
             id,
             message: event.target.value,
-            date: new Intl.DateTimeFormat("ko-KR").format(date),
+            date:
+              new Intl.DateTimeFormat("ko-KR").format(date) +
+              " " +
+              ampm +
+              " " +
+              hour +
+              ":" +
+              minute +
+              ":" +
+              second,
           },
         ];
         // return {
@@ -156,7 +173,7 @@ function ChatUser1() {
   };
   return (
     <ChatBox>
-      <h2 style={{ marginBottom: "20px" }}>user1</h2>
+      <h2 style={{ marginBottom: "20px", color: "#bb2649" }}>user1</h2>
       <MsgLog>
         {context?.message.map((msg, index) => (
           <ChatList
@@ -168,7 +185,11 @@ function ChatUser1() {
             }
           >
             <UserName>{id === msg.id ? null : msg.id}</UserName>
-            <ChatMsg>{msg.message}</ChatMsg>
+            <ChatMsg
+              style={id === msg.id ? { borderRadius: "10px 0 10px 10px" } : {}}
+            >
+              {msg.message}
+            </ChatMsg>
             <ChatDate>{msg.date}</ChatDate>
             {id === msg.id && (
               <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
@@ -176,13 +197,17 @@ function ChatUser1() {
           </ChatList>
         ))}
       </MsgLog>
-      <InputBox
-        type="text"
-        onKeyDown={onKeyDown}
-        value={input}
-        onChange={onChange}
-      />
-      <SubmitBtn>전송</SubmitBtn>
+      <div>
+        <div>
+          <InputBox
+            type="text"
+            onKeyDown={onKeyDown}
+            value={input}
+            onChange={onChange}
+          />
+        </div>
+        {/* <SubmitBtn>전송</SubmitBtn> */}
+      </div>
     </ChatBox>
   );
 }
@@ -231,7 +256,7 @@ function ChatUser2() {
 
   return (
     <ChatBox>
-      <h2 style={{ marginBottom: "20px" }}>user2</h2>
+      <h2 style={{ marginBottom: "20px", color: "#bb2649" }}>user2</h2>
       <MsgLog>
         {context?.message.map((msg, index) => (
           <ChatList
@@ -257,7 +282,7 @@ function ChatUser2() {
         value={input}
         onChange={onChange}
       />
-      <SubmitBtn>전송</SubmitBtn>
+      {/* <SubmitBtn>전송</SubmitBtn> */}
     </ChatBox>
   );
 }
