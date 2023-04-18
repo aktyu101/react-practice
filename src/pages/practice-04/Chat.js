@@ -15,7 +15,7 @@ export default function Chat() {
   return (
     <>
       <div>
-        <p>공백일경우! 엔터 작동 안하게</p>
+        <p>스페이스바만 있을 경우에도 공백으로 인식</p>
         <p>입력버튼 추가</p>
         <p>
           보낸시간에서 10초가 지나지 않았을 경우 -알럿 노출 / 지났을 경우 - 삭제
@@ -135,7 +135,7 @@ function ChatUser1() {
   }, [context?.message]);
 
   const onKeyDown = (event) => {
-    if (event.keyCode === 13) {
+    if (event.keyCode === 13 && input !== ""  ) {
       //공백포함 빈 값일경우 미반환처리
       console.log("key event", event.target.value);
       const date = new Date();
@@ -229,7 +229,7 @@ function ChatUser2() {
   //   context?.setMessage(event.target.value);
   // };
   const onKeyDown = (event) => {
-    if (event.keyCode === 13) {
+    if (event.keyCode === 13 && input !== "") {
       console.log("key event", event.target.value);
       const date = new Date();
       let hour = date.getHours();
