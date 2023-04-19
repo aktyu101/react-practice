@@ -48,17 +48,15 @@ const ChatBox = styled.div`
   border-radius: 5px;
   background-color: #fff;
 `;
-const InputBox = styled.input`
+const WrapInputBox = styled.div`
   width: 80%;
   text-indent: 10px;
   box-sizing: border-box;
   line-height: 45px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
   background: #eee;
   outline: none;
   border: none;
+  display: inline-block;
 `;
 const MsgLog = styled.ul`
   height: 550px;
@@ -213,14 +211,14 @@ function ChatUser1() {
       </MsgLog>
       </ChatLogWrap>
       <div style={{display: "flex", width: "100%", backgroundColor: "#222", height: "100px"}}>
-        <div>
-          <InputBox
+        <WrapInputBox>
+          <input
             type="text"
             onKeyDown={onKeyDown}
             value={input}
             onChange={onChange}
           />
-        </div>
+        </WrapInputBox>
         <SubmitBtn>전송</SubmitBtn>
       </div>
     </ChatBox>
@@ -307,7 +305,7 @@ function ChatUser2() {
       </MsgLog>
       </ChatLogWrap>
       <div>
-        <InputBox
+        <WrapInputBox
           type="text"
           onKeyDown={onKeyDown}
           value={input}
