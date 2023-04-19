@@ -15,7 +15,6 @@ export default function Chat() {
   return (
     <>
       <div>
-        <p>입력버튼 추가</p>
         <p>
           보낸시간에서 10초가 지나지 않았을 경우 -알럿 노출 / 지났을 경우 - 삭제
           가능
@@ -40,7 +39,7 @@ export default function Chat() {
 }
 
 const ChatBox = styled.div`
-  width: 800px;
+  width: 700px;
   border: solid 1px #ddd;
   height: 700px;
   position: relative;
@@ -48,9 +47,21 @@ const ChatBox = styled.div`
   border-radius: 5px;
   background-color: #fff;
 `;
+const WrapInput = styled.div`
+  display: flex;
+  width: 698px;
+  height: 100px;
+  justify-content: space-around;
+  padding-top: 10px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  box-sizing: border-box;
+  background-color: #eee;
+`;
 const WrapInputBox = styled.div`
-  width: 80%;
-  text-indent: 10px;
+  width: 600px;
+  height: 100%;
   box-sizing: border-box;
   line-height: 45px;
   background: #eee;
@@ -58,8 +69,17 @@ const WrapInputBox = styled.div`
   border: none;
   display: inline-block;
 `;
+const InputBox = styled.input`
+  width: 600px;
+  border: none;
+  background-color: #ddd;
+  box-sizing: border-box;
+  height: 80px;
+  outline: none;
+  text-indent: 10px;
+`;
 const MsgLog = styled.ul`
-  height: 550px;
+  height: 500px;
   overflow-y: auto;
   padding-right: 5px;
   &::-webkit-scrollbar {
@@ -112,16 +132,16 @@ const UserName = styled.div`
   border-radius: 50%;
 `;
 const SubmitBtn = styled.button`
-  width: 50px;
+  width: 70px;
   text-align: center;
   height: 33px;
   border: none;
-  background-color: #111;
+  background-color: #2c7ae0;
   color: #fff;
   cursor: pointer;
 `;
 const ChatLogWrap = styled.div`
-  width: 100%;
+  width: 700px;
   box-sizing: border-box;
   padding: 20px;
   height: 600px;
@@ -166,6 +186,28 @@ function ChatUser1() {
     }
   };
 
+  const onSubmit = (event) => {
+    if (input.trim() !== "") {
+      const date = new Date();
+      let hour = date.getHours();
+      let minute = date.getMinutes();
+      let second = date.getSeconds();
+      const ampm = hour <= 12 ? "오전" : "오후";
+      const time = " " + ampm + " " + hour + ":" + minute + ":" + second;
+      context?.setMessage((message) => {
+        return [
+          ...message,
+          {
+            id,
+            message: input,
+            date: new Intl.DateTimeFormat("ko-KR").format(date) + time,
+          },
+        ];
+      });
+      setInput("");
+    }
+  };
+
   const onChange = (event) => {
     setInput(event.target.value);
   };
@@ -181,46 +223,50 @@ function ChatUser1() {
   return (
     <ChatBox>
       <ChatLogWrap>
-      <h2 style={{ marginBottom: "20px", color: "#bb2649" }}>user1</h2>
-      <MsgLog>
-        {context?.message.map((msg, index) => (
-          <ChatList
-            key={index}
-            style={
-              id === msg.id
-                ? { flexDirection: "row-reverse" }
-                : { justifyContent: "flex-start" }
-            }
-          >
-            <UserName
-              style={id === msg.id ? { display: "none" } : { display: "block" }}
+        <h2 style={{ marginBottom: "20px", color: "#bb2649" }}>user1</h2>
+        <MsgLog>
+          {context?.message.map((msg, index) => (
+            <ChatList
+              key={index}
+              style={
+                id === msg.id
+                  ? { flexDirection: "row-reverse" }
+                  : { justifyContent: "flex-start" }
+              }
             >
-              {id === msg.id ? null : msg.id}
-            </UserName>
-            <ChatMsg
-              style={id === msg.id ? { borderRadius: "10px 0 10px 10px" } : {}}
-            >
-              {msg.message}
-            </ChatMsg>
-            <ChatDate>{msg.date}</ChatDate>
-            {id === msg.id && (
-              <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
-            )}
-          </ChatList>
-        ))}
-      </MsgLog>
+              <UserName
+                style={
+                  id === msg.id ? { display: "none" } : { display: "block" }
+                }
+              >
+                {id === msg.id ? null : msg.id}
+              </UserName>
+              <ChatMsg
+                style={
+                  id === msg.id ? { borderRadius: "10px 0 10px 10px" } : {}
+                }
+              >
+                {msg.message}
+              </ChatMsg>
+              <ChatDate>{msg.date}</ChatDate>
+              {id === msg.id && (
+                <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
+              )}
+            </ChatList>
+          ))}
+        </MsgLog>
+        <WrapInput>
+          <WrapInputBox>
+            <InputBox
+              type="text"
+              onKeyDown={onKeyDown}
+              value={input}
+              onChange={onChange}
+            />
+          </WrapInputBox>
+          <SubmitBtn onClick={onSubmit}>전송</SubmitBtn>
+        </WrapInput>
       </ChatLogWrap>
-      <div style={{display: "flex", width: "100%", backgroundColor: "#222", height: "100px"}}>
-        <WrapInputBox>
-          <input
-            type="text"
-            onKeyDown={onKeyDown}
-            value={input}
-            onChange={onChange}
-          />
-        </WrapInputBox>
-        <SubmitBtn>전송</SubmitBtn>
-      </div>
     </ChatBox>
   );
 }
@@ -260,6 +306,27 @@ function ChatUser2() {
       setInput("");
     }
   };
+  const onSubmit = (event) => {
+    if (input.trim() !== "") {
+      const date = new Date();
+      let hour = date.getHours();
+      let minute = date.getMinutes();
+      let second = date.getSeconds();
+      const ampm = hour <= 12 ? "오전" : "오후";
+      const time = " " + ampm + " " + hour + ":" + minute + ":" + second;
+      context?.setMessage((message) => {
+        return [
+          ...message,
+          {
+            id,
+            message: input,
+            date: new Intl.DateTimeFormat("ko-KR").format(date) + time,
+          },
+        ];
+      });
+      setInput("");
+    }
+  };
   const onChange = (event) => {
     setInput(event.target.value);
   };
@@ -275,44 +342,50 @@ function ChatUser2() {
   return (
     <ChatBox>
       <ChatLogWrap>
-      <h2 style={{ marginBottom: "20px", color: "#bb2649" }}>user2</h2>
-      <MsgLog>
-        {context?.message.map((msg, index) => (
-          <ChatList
-            key={index}
-            style={
-              id === msg.id
-                ? { flexDirection: "row-reverse" }
-                : { justifyContent: "flex-start" }
-            }
-          >
-            <UserName
-              style={id === msg.id ? { display: "none" } : { display: "block" }}
+        <h2 style={{ marginBottom: "20px", color: "#bb2649" }}>user2</h2>
+        <MsgLog>
+          {context?.message.map((msg, index) => (
+            <ChatList
+              key={index}
+              style={
+                id === msg.id
+                  ? { flexDirection: "row-reverse" }
+                  : { justifyContent: "flex-start" }
+              }
             >
-              {id === msg.id ? null : msg.id}
-            </UserName>
-            <ChatMsg
-              style={id === msg.id ? { borderRadius: "10px 0 10px 10px" } : {}}
-            >
-              {msg.message}
-            </ChatMsg>
-            <ChatDate>{msg.date}</ChatDate>
-            {id === msg.id && (
-              <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
-            )}
-          </ChatList>
-        ))}
-      </MsgLog>
+              <UserName
+                style={
+                  id === msg.id ? { display: "none" } : { display: "block" }
+                }
+              >
+                {id === msg.id ? null : msg.id}
+              </UserName>
+              <ChatMsg
+                style={
+                  id === msg.id ? { borderRadius: "10px 0 10px 10px" } : {}
+                }
+              >
+                {msg.message}
+              </ChatMsg>
+              <ChatDate>{msg.date}</ChatDate>
+              {id === msg.id && (
+                <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
+              )}
+            </ChatList>
+          ))}
+        </MsgLog>
+        <WrapInput>
+          <WrapInputBox>
+            <InputBox
+              type="text"
+              onKeyDown={onKeyDown}
+              value={input}
+              onChange={onChange}
+            />
+          </WrapInputBox>
+          <SubmitBtn onClick={onSubmit}>전송</SubmitBtn>
+        </WrapInput>
       </ChatLogWrap>
-      <div>
-        <WrapInputBox
-          type="text"
-          onKeyDown={onKeyDown}
-          value={input}
-          onChange={onChange}
-        />
-        <SubmitBtn>전송</SubmitBtn>
-      </div>
     </ChatBox>
   );
 }
