@@ -15,7 +15,6 @@ export default function Chat() {
   return (
     <>
       <div>
-        <p>스페이스바만 있을 경우에도 공백으로 인식</p>
         <p>입력버튼 추가</p>
         <p>
           보낸시간에서 10초가 지나지 않았을 경우 -알럿 노출 / 지났을 경우 - 삭제
@@ -45,13 +44,12 @@ const ChatBox = styled.div`
   border: solid 1px #ddd;
   height: 700px;
   position: relative;
-  padding: 20px;
   box-sizing: border-box;
   border-radius: 5px;
   background-color: #fff;
 `;
 const InputBox = styled.input`
-  width: 100%;
+  width: 80%;
   text-indent: 10px;
   box-sizing: border-box;
   line-height: 45px;
@@ -122,6 +120,13 @@ const SubmitBtn = styled.button`
   border: none;
   background-color: #111;
   color: #fff;
+  cursor: pointer;
+`;
+const ChatLogWrap = styled.div`
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+  height: 600px;
 `;
 function ChatUser1() {
   const id = useId();
@@ -135,8 +140,7 @@ function ChatUser1() {
   }, [context?.message]);
 
   const onKeyDown = (event) => {
-    if (event.keyCode === 13 && input !== ""  ) {
-      //공백포함 빈 값일경우 미반환처리
+    if (event.keyCode === 13 && input.trim() !== "") {
       console.log("key event", event.target.value);
       const date = new Date();
       let hour = date.getHours();
@@ -178,6 +182,7 @@ function ChatUser1() {
   };
   return (
     <ChatBox>
+      <ChatLogWrap>
       <h2 style={{ marginBottom: "20px", color: "#bb2649" }}>user1</h2>
       <MsgLog>
         {context?.message.map((msg, index) => (
@@ -206,7 +211,8 @@ function ChatUser1() {
           </ChatList>
         ))}
       </MsgLog>
-      <div>
+      </ChatLogWrap>
+      <div style={{display: "flex", width: "100%", backgroundColor: "#222", height: "100px"}}>
         <div>
           <InputBox
             type="text"
@@ -215,7 +221,7 @@ function ChatUser1() {
             onChange={onChange}
           />
         </div>
-        {/* <SubmitBtn>전송</SubmitBtn> */}
+        <SubmitBtn>전송</SubmitBtn>
       </div>
     </ChatBox>
   );
@@ -229,7 +235,7 @@ function ChatUser2() {
   //   context?.setMessage(event.target.value);
   // };
   const onKeyDown = (event) => {
-    if (event.keyCode === 13 && input !== "") {
+    if (event.keyCode === 13 && input.trim() !== "") {
       console.log("key event", event.target.value);
       const date = new Date();
       let hour = date.getHours();
@@ -270,6 +276,7 @@ function ChatUser2() {
 
   return (
     <ChatBox>
+      <ChatLogWrap>
       <h2 style={{ marginBottom: "20px", color: "#bb2649" }}>user2</h2>
       <MsgLog>
         {context?.message.map((msg, index) => (
@@ -298,13 +305,16 @@ function ChatUser2() {
           </ChatList>
         ))}
       </MsgLog>
-      <InputBox
-        type="text"
-        onKeyDown={onKeyDown}
-        value={input}
-        onChange={onChange}
-      />
-      {/* <SubmitBtn>전송</SubmitBtn> */}
+      </ChatLogWrap>
+      <div>
+        <InputBox
+          type="text"
+          onKeyDown={onKeyDown}
+          value={input}
+          onChange={onChange}
+        />
+        <SubmitBtn>전송</SubmitBtn>
+      </div>
     </ChatBox>
   );
 }
