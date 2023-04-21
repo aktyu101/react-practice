@@ -14,12 +14,6 @@ export default function Chat() {
   const [message, setMessage] = useState([]);
   return (
     <>
-      <div>
-        <p>
-          보낸시간에서 10초가 지나지 않았을 경우 -알럿 노출 / 지났을 경우 - 삭제
-          가능
-        </p>
-      </div>
       <div
         id="content_wrapper"
         style={{
@@ -83,7 +77,7 @@ const MsgLog = styled.ul`
   overflow-y: auto;
   padding-right: 5px;
   &::-webkit-scrollbar {
-    width: 2px;
+    width: 4px;
     background: #eee;
   }
   &::-webkit-scrollbar-thumb {
@@ -136,7 +130,7 @@ const SubmitBtn = styled.button`
   text-align: center;
   height: 33px;
   border: none;
-  background-color: #2c7ae0;
+  background-color: #bb2649;
   color: #fff;
   cursor: pointer;
 `;
@@ -164,6 +158,7 @@ function ChatUser1() {
       let hour = date.getHours();
       let minute = date.getMinutes();
       let second = date.getSeconds();
+      let sendTime = date.getTime();
       const ampm = hour <= 12 ? "오전" : "오후";
       const time = " " + ampm + " " + hour + ":" + minute + ":" + second;
       context?.setMessage((message) => {
@@ -173,6 +168,7 @@ function ChatUser1() {
             id,
             message: event.target.value,
             date: new Intl.DateTimeFormat("ko-KR").format(date) + time,
+            sendTime: Number(sendTime),
           },
         ];
         // return {
@@ -192,6 +188,7 @@ function ChatUser1() {
       let hour = date.getHours();
       let minute = date.getMinutes();
       let second = date.getSeconds();
+      let sendTime = date.getTime();
       const ampm = hour <= 12 ? "오전" : "오후";
       const time = " " + ampm + " " + hour + ":" + minute + ":" + second;
       context?.setMessage((message) => {
@@ -201,6 +198,7 @@ function ChatUser1() {
             id,
             message: input,
             date: new Intl.DateTimeFormat("ko-KR").format(date) + time,
+            sendTime: Number(sendTime),
           },
         ];
       });
@@ -212,13 +210,25 @@ function ChatUser1() {
     setInput(event.target.value);
   };
 
-  const onDelete = (index) => {
-    console.log("deleteindex", index);
-    context?.setMessage((message) => {
-      const msg = [...message];
-      msg.splice(index, 1);
-      return msg;
-    });
+  const onDelete = (index, message) => {
+    const date = new Date();
+    const deleteTime = date.getTime();
+    const indexNumber = Number(index);
+    console.log(deleteTime >= context?.message[indexNumber].sendTime + 5000);
+    if (deleteTime >= context?.message[indexNumber].sendTime + 5000) {
+      context?.setMessage((message) => {
+        const msg = [...message];
+        msg.splice(index, 1);
+        return msg;
+      });
+    } else {
+      return alert(
+        Math.floor(
+          (deleteTime - (context?.message[indexNumber].sendTime + 5000)) *
+            -0.001
+        ) + "초 뒤 삭제 가능합니다."
+      );
+    }
   };
   return (
     <ChatBox>
@@ -285,6 +295,7 @@ function ChatUser2() {
       let hour = date.getHours();
       let minute = date.getMinutes();
       let second = date.getSeconds();
+      let sendTime = date.getTime();
       const ampm = hour <= 12 ? "오전" : "오후";
       const time = " " + ampm + " " + hour + ":" + minute + ":" + second;
       context?.setMessage((message) => {
@@ -294,6 +305,7 @@ function ChatUser2() {
             id,
             message: event.target.value,
             date: new Intl.DateTimeFormat("ko-KR").format(date) + time,
+            sendTime: Number(sendTime),
           },
         ];
         // return {
@@ -312,6 +324,7 @@ function ChatUser2() {
       let hour = date.getHours();
       let minute = date.getMinutes();
       let second = date.getSeconds();
+      let sendTime = date.getTime();
       const ampm = hour <= 12 ? "오전" : "오후";
       const time = " " + ampm + " " + hour + ":" + minute + ":" + second;
       context?.setMessage((message) => {
@@ -321,6 +334,7 @@ function ChatUser2() {
             id,
             message: input,
             date: new Intl.DateTimeFormat("ko-KR").format(date) + time,
+            sendTime: Number(sendTime),
           },
         ];
       });
@@ -330,13 +344,25 @@ function ChatUser2() {
   const onChange = (event) => {
     setInput(event.target.value);
   };
-  const onDelete = (index) => {
-    console.log("deleteindex", index);
-    context?.setMessage((message) => {
-      const msg = [...message];
-      msg.splice(index, 1);
-      return msg;
-    });
+  const onDelete = (index, message) => {
+    const date = new Date();
+    const deleteTime = date.getTime();
+    const indexNumber = Number(index);
+    console.log(deleteTime >= context?.message[indexNumber].sendTime + 5000);
+    if (deleteTime >= context?.message[indexNumber].sendTime + 5000) {
+      context?.setMessage((message) => {
+        const msg = [...message];
+        msg.splice(index, 1);
+        return msg;
+      });
+    } else {
+      return alert(
+        Math.floor(
+          (deleteTime - (context?.message[indexNumber].sendTime + 5000)) *
+            -0.001
+        ) + "초 뒤 삭제 가능합니다."
+      );
+    }
   };
 
   return (
