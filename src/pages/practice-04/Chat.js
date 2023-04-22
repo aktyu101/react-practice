@@ -7,11 +7,37 @@ import {
   useRef, //state가 변경되어 다시 돌더라도 초기화하지 않음, 값 유지 o, 렌더링 x
 } from "react";
 import styled from "@emotion/styled";
+import { getDateTime } from "../../utils/dateUtils";
 
 const ChatContext = createContext(null);
 
 export default function Chat() {
   const [message, setMessage] = useState([]);
+  const pressedKeys = useRef(new Set());
+
+  const onKeyDown = (event, input, id) => {
+    console.log("event keycode", event.keyCode);
+    pressedKeys.current.add(event.keyCode);
+    console.log("pressedkeycode", pressedKeys.current); //set은 중복값을 만들지 않음
+    if (
+      pressedKeys.current.has(16) &&
+      pressedKeys.current.has(13) &&
+      input.trim() !== ""
+    ) {
+      console.log("key event", event.target.value);
+      setMessage((message) => {
+        return [
+          ...message,
+          {
+            id,
+            message: event.target.value,
+            ...getDateTime(),
+          },
+        ];
+      });
+    }
+  };
+
   return (
     <>
       <div
@@ -22,7 +48,7 @@ export default function Chat() {
           gap: "10px",
         }}
       >
-        <ChatContext.Provider value={{ message, setMessage }}>
+        <ChatContext.Provider value={{ message, setMessage, onKeyDown }}>
           <ChatUser1 />
           <ChatUser2 />
           {/* <ChatUser3 /> */}
@@ -32,118 +58,12 @@ export default function Chat() {
   );
 }
 
-const ChatBox = styled.div`
-  width: 700px;
-  border: solid 1px #ddd;
-  height: 700px;
-  position: relative;
-  box-sizing: border-box;
-  border-radius: 5px;
-  background-color: #fff;
-`;
-const WrapInput = styled.div`
-  display: flex;
-  width: 698px;
-  height: 100px;
-  justify-content: space-around;
-  padding-top: 10px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  box-sizing: border-box;
-  background-color: #eee;
-`;
-const WrapInputBox = styled.div`
-  width: 600px;
-  height: 100%;
-  box-sizing: border-box;
-  line-height: 45px;
-  background: #eee;
-  outline: none;
-  border: none;
-  display: inline-block;
-`;
-const InputBox = styled.input`
-  width: 600px;
-  border: none;
-  background-color: #ddd;
-  box-sizing: border-box;
-  height: 80px;
-  outline: none;
-  text-indent: 10px;
-`;
-const MsgLog = styled.ul`
-  height: 500px;
-  overflow-y: auto;
-  padding-right: 5px;
-  &::-webkit-scrollbar {
-    width: 4px;
-    background: #eee;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 2px;
-    background: #666;
-  }
-`;
-const ChatList = styled.li`
-  display: flex;
-  justify-content: flex-srart;
-  gap: 15px;
-  align-items: baseline;
-`;
-const ChatMsg = styled.div`
-  background-color: #eee;
-  line-height: 35px;
-  padding: 5px 10px;
-  margin-bottom: 5px;
-  word-break: break-all;
-  max-width: 380px;
-  color: #222;
-  border-radius: 0px 10px 10px 10px;
-`;
-const ChatDate = styled.div`
-  font-size: 11px;
-  line-height: 35px;
-  color: #6b6b6b;
-`;
-const DelBtn = styled.button`
-  font-size: 10px;
-  padding: 5px;
-  border: none;
-  cursor: pointer;
-  margin-left: 5px;
-  color: #fff;
-  background-color: #065fd499;
-`;
-const UserName = styled.div`
-  line-height: 30px;
-  text-align: center;
-  box-sizing: border-box;
-  color: #222;
-  width: 35px;
-  height: 35px;
-  border: solid 1px #eee;
-  border-radius: 50%;
-`;
-const SubmitBtn = styled.button`
-  width: 70px;
-  text-align: center;
-  height: 33px;
-  border: none;
-  background-color: #bb2649;
-  color: #fff;
-  cursor: pointer;
-`;
-const ChatLogWrap = styled.div`
-  width: 700px;
-  box-sizing: border-box;
-  padding: 20px;
-  height: 600px;
-`;
 function ChatUser1() {
   const id = useId();
   const context = useContext(ChatContext);
   const [input, setInput] = useState("");
+  const pressedKeys = useRef(new Set());
+
   // const onChange = (event) => {
   //   context?.setMessage(event.target.value);
   // };
@@ -152,53 +72,24 @@ function ChatUser1() {
   }, [context?.message]);
 
   const onKeyDown = (event) => {
-    if (event.keyCode === 13 && input.trim() !== "") {
-      console.log("key event", event.target.value);
-      const date = new Date();
-      let hour = date.getHours();
-      let minute = date.getMinutes();
-      let second = date.getSeconds();
-      let sendTime = date.getTime();
-      const ampm = hour <= 12 ? "오전" : "오후";
-      const time = " " + ampm + " " + hour + ":" + minute + ":" + second;
-      context?.setMessage((message) => {
-        return [
-          ...message,
-          {
-            id,
-            message: event.target.value,
-            date: new Intl.DateTimeFormat("ko-KR").format(date) + time,
-            sendTime: Number(sendTime),
-          },
-        ];
-        // return {
-        //   ...message,
-        //   [id]: [...(message[id] ?? []), event.target.value],
-        //   //a ?? b : a가 null, undefined면 b를 반환 아니면 a를 반환
-        //   //null, undefined만 체크
-        // };
-      });
-      setInput("");
-    }
+    context?.onKeyDown(event, input, id); //optional changing 실행은 안시키지만 에러는 발생하지 않음
+    setInput("");
+  };
+  //고차함수
+  const onKeyUp = (event) => {
+    console.log("onkeyup", event.keyCode);
+    pressedKeys.current.delete(event.keyCode); //delete 같은 값이 있으면 지움
   };
 
   const onSubmit = (event) => {
     if (input.trim() !== "") {
-      const date = new Date();
-      let hour = date.getHours();
-      let minute = date.getMinutes();
-      let second = date.getSeconds();
-      let sendTime = date.getTime();
-      const ampm = hour <= 12 ? "오전" : "오후";
-      const time = " " + ampm + " " + hour + ":" + minute + ":" + second;
       context?.setMessage((message) => {
         return [
           ...message,
           {
             id,
             message: input,
-            date: new Intl.DateTimeFormat("ko-KR").format(date) + time,
-            sendTime: Number(sendTime),
+            ...getDateTime(),
           },
         ];
       });
@@ -252,6 +143,7 @@ function ChatUser1() {
                 {id === msg.id ? null : msg.id}
               </UserName>
               <ChatMsg
+                isEqualId={id === msg.id}
                 style={
                   id === msg.id ? { borderRadius: "10px 0 10px 10px" } : {}
                 }
@@ -268,8 +160,8 @@ function ChatUser1() {
         <WrapInput>
           <WrapInputBox>
             <InputBox
-              type="text"
               onKeyDown={onKeyDown}
+              onKeyUp={onKeyUp}
               value={input}
               onChange={onChange}
             />
@@ -289,52 +181,21 @@ function ChatUser2() {
   //   context?.setMessage(event.target.value);
   // };
   const onKeyDown = (event) => {
-    if (event.keyCode === 13 && input.trim() !== "") {
-      console.log("key event", event.target.value);
-      const date = new Date();
-      let hour = date.getHours();
-      let minute = date.getMinutes();
-      let second = date.getSeconds();
-      let sendTime = date.getTime();
-      const ampm = hour <= 12 ? "오전" : "오후";
-      const time = " " + ampm + " " + hour + ":" + minute + ":" + second;
-      context?.setMessage((message) => {
-        return [
-          ...message,
-          {
-            id,
-            message: event.target.value,
-            date: new Intl.DateTimeFormat("ko-KR").format(date) + time,
-            sendTime: Number(sendTime),
-          },
-        ];
-        // return {
-        //   ...message,
-        //   [id]: [...(message[id] ?? []), event.target.value],
-        //   //a ?? b : a가 null, undefined면 b를 반환 아니면 a를 반환
-        //   //null, undefined만 체크
-        // };
-      });
-      setInput("");
-    }
+    context?.onKeyDown(event, input, id); //optional changing 실행은 안시키지만 에러는 발생하지 않음
+    setInput("");
+  };
+  const onKeyUp = (event) => {
+    console.log("onkeyup", event.keyCode);
   };
   const onSubmit = (event) => {
     if (input.trim() !== "") {
-      const date = new Date();
-      let hour = date.getHours();
-      let minute = date.getMinutes();
-      let second = date.getSeconds();
-      let sendTime = date.getTime();
-      const ampm = hour <= 12 ? "오전" : "오후";
-      const time = " " + ampm + " " + hour + ":" + minute + ":" + second;
       context?.setMessage((message) => {
         return [
           ...message,
           {
             id,
             message: input,
-            date: new Intl.DateTimeFormat("ko-KR").format(date) + time,
-            sendTime: Number(sendTime),
+            ...getDateTime(),
           },
         ];
       });
@@ -403,8 +264,8 @@ function ChatUser2() {
         <WrapInput>
           <WrapInputBox>
             <InputBox
-              type="text"
               onKeyDown={onKeyDown}
+              onKeyUp={onKeyUp}
               value={input}
               onChange={onChange}
             />
@@ -440,3 +301,115 @@ function ChatUser2() {
 //채팅창 스타일 (emotion)
 //date를써서 입력된 date값 현재 날짜 대비 10초가 지나야 지울 수 있음 //안지났으면 aleat ondelete때 비교
 //date찾아서! 날짜정보 비교
+const ChatBox = styled.div`
+  width: 700px;
+  border: solid 1px #ddd;
+  height: 700px;
+  position: relative;
+  box-sizing: border-box;
+  border-radius: 5px;
+  background-color: #fff;
+`;
+const WrapInput = styled.div`
+  display: flex;
+  width: 698px;
+  height: 100px;
+  justify-content: space-around;
+  padding-top: 10px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  box-sizing: border-box;
+  background-color: #eee;
+`;
+const WrapInputBox = styled.div`
+  width: 600px;
+  height: 100%;
+  box-sizing: border-box;
+  line-height: 45px;
+  background: #eee;
+  outline: none;
+  border: none;
+  display: inline-block;
+`;
+const InputBox = styled.textarea`
+  width: 600px;
+  border: none;
+  background-color: #ddd;
+  box-sizing: border-box;
+  height: 80px;
+  outline: none;
+  text-indent: 10px;
+  padding: 10px 5px;
+`;
+const MsgLog = styled.ul`
+  height: 500px;
+  overflow-y: auto;
+  padding-right: 5px;
+  &::-webkit-scrollbar {
+    width: 4px;
+    background: #eee;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background: #666;
+  }
+`;
+const ChatList = styled.li`
+  display: flex;
+  justify-content: flex-srart;
+  gap: 15px;
+  align-items: baseline;
+`;
+const ChatMsg = styled.pre`
+  background-color: #eee;
+  line-height: 15px;
+  padding: 5px 10px;
+  margin-bottom: 5px;
+  word-break: break-all;
+  max-width: 380px;
+  color: #222;
+  border-radius: ${(props) =>
+    props.isEqualId ? "10px 0 10px 10px" : "0 10px 10px 10px"};
+  white-space: pre-wrap;
+  word-break: break-all;
+`;
+const ChatDate = styled.div`
+  font-size: 11px;
+  line-height: 35px;
+  color: #6b6b6b;
+`;
+const DelBtn = styled.button`
+  font-size: 10px;
+  padding: 5px;
+  border: none;
+  cursor: pointer;
+  margin-left: 5px;
+  color: #fff;
+  background-color: #065fd499;
+`;
+const UserName = styled.div`
+  line-height: 30px;
+  text-align: center;
+  box-sizing: border-box;
+  color: #222;
+  width: 35px;
+  height: 35px;
+  border: solid 1px #eee;
+  border-radius: 50%;
+`;
+const SubmitBtn = styled.button`
+  width: 70px;
+  text-align: center;
+  height: 33px;
+  border: none;
+  background-color: #bb2649;
+  color: #fff;
+  cursor: pointer;
+`;
+const ChatLogWrap = styled.div`
+  width: 700px;
+  box-sizing: border-box;
+  padding: 20px;
+  height: 600px;
+`;
