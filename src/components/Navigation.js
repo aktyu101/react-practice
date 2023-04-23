@@ -26,6 +26,9 @@ export default function Navigation() {
             <Link to="/chat" className="nav_tab">
               chat
             </Link>
+            <Link to="/chat2" className="nav_tab">
+              chat2
+            </Link>
             <Link to="/counter" className="nav_tab">
               counter
             </Link>

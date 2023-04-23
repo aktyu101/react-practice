@@ -10,6 +10,7 @@ import BoxColor from "./pages/practice-01/BoxColor";
 import Input from "./pages/practice-02/Input";
 import List from "./pages/practice-03/List";
 import Chat from "./pages/practice-04/Chat";
+import Chat2 from "./pages/practice-04/Chat2";
 import Counter from "./pages/practice-04/Counter";
 import styled from "@emotion/styled";
 
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: "/chat",
         element: <Chat />,
+      },
+      {
+        path: "/chat2",
+        element: <Chat2 />,
       },
       {
         path: "/counter",
