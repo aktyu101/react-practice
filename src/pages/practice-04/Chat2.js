@@ -26,7 +26,6 @@ export default function Chat() {
         <ChatContext.Provider value={{ message, setMessage }}>
           <ChatUser1 />
           <ChatUser2 />
-          {/* <ChatUser3 /> */}
         </ChatContext.Provider>
       </div>
     </>
@@ -37,9 +36,6 @@ function ChatUser1() {
   const id = useId();
   const context = useContext(ChatContext);
   const [input, setInput] = useState("");
-  // const onChange = (event) => {
-  //   context?.setMessage(event.target.value);
-  // };
   useEffect(() => {
     console.log(context?.message);
   }, [context?.message]);
@@ -47,29 +43,15 @@ function ChatUser1() {
   const onKeyDown = (event) => {
     if (event.keyCode === 13 && input.trim() !== "") {
       console.log("key event", event.target.value);
-      const date = new Date();
-      let hour = date.getHours();
-      let minute = date.getMinutes();
-      let second = date.getSeconds();
-      let sendTime = date.getTime();
-      const ampm = hour <= 12 ? "오전" : "오후";
-      const time = " " + ampm + " " + hour + ":" + minute + ":" + second;
       context?.setMessage((message) => {
         return [
           ...message,
           {
             id,
             message: event.target.value,
-            date: new Intl.DateTimeFormat("ko-KR").format(date) + time,
-            sendTime: Number(sendTime),
+            ...getDateTime(),
           },
         ];
-        // return {
-        //   ...message,
-        //   [id]: [...(message[id] ?? []), event.target.value],
-        //   //a ?? b : a가 null, undefined면 b를 반환 아니면 a를 반환
-        //   //null, undefined만 체크
-        // };
       });
       setInput("");
     }
@@ -77,21 +59,13 @@ function ChatUser1() {
 
   const onSubmit = (event) => {
     if (input.trim() !== "") {
-      const date = new Date();
-      let hour = date.getHours();
-      let minute = date.getMinutes();
-      let second = date.getSeconds();
-      let sendTime = date.getTime();
-      const ampm = hour <= 12 ? "오전" : "오후";
-      const time = " " + ampm + " " + hour + ":" + minute + ":" + second;
       context?.setMessage((message) => {
         return [
           ...message,
           {
             id,
             message: input,
-            date: new Intl.DateTimeFormat("ko-KR").format(date) + time,
-            sendTime: Number(sendTime),
+            ...getDateTime(),
           },
         ];
       });
@@ -126,31 +100,14 @@ function ChatUser1() {
   return (
     <ChatBox>
       <ChatLogWrap>
-        <h2 style={{ marginBottom: "20px", color: "#000" }}>user1</h2>
+        <DivisionUser>{id}</DivisionUser>
         <MsgLog>
           {context?.message.map((msg, index) => (
-            <ChatList
-              key={index}
-              style={
-                id === msg.id
-                  ? { flexDirection: "row-reverse" }
-                  : { justifyContent: "flex-start" }
-              }
-            >
-              <UserName
-                style={
-                  id === msg.id ? { display: "none" } : { display: "block" }
-                }
-              >
+            <ChatList key={index} isEqualId={id === msg.id}>
+              <UserName isEqualId={id === msg.id}>
                 {id === msg.id ? null : msg.id}
               </UserName>
-              <ChatMsg
-                style={
-                  id === msg.id ? { borderRadius: "10px 0 10px 10px" } : {}
-                }
-              >
-                {msg.message}
-              </ChatMsg>
+              <ChatMsg isEqualId={id === msg.id}>{msg.message}</ChatMsg>
               <ChatDate>{msg.date}</ChatDate>
               {id === msg.id && (
                 <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
@@ -180,20 +137,13 @@ function ChatUser2() {
     if (event.keyCode === 13 && input.trim() !== "") {
       console.log("key event", event.target.value);
       const date = new Date();
-      let hour = date.getHours();
-      let minute = date.getMinutes();
-      let second = date.getSeconds();
-      let sendTime = date.getTime();
-      const ampm = hour <= 12 ? "오전" : "오후";
-      const time = " " + ampm + " " + hour + ":" + minute + ":" + second;
       context?.setMessage((message) => {
         return [
           ...message,
           {
             id,
             message: event.target.value,
-            date: new Intl.DateTimeFormat("ko-KR").format(date) + time,
-            sendTime: Number(sendTime),
+            ...getDateTime(),
           },
         ];
         // return {
@@ -208,21 +158,13 @@ function ChatUser2() {
   };
   const onSubmit = (event) => {
     if (input.trim() !== "") {
-      const date = new Date();
-      let hour = date.getHours();
-      let minute = date.getMinutes();
-      let second = date.getSeconds();
-      let sendTime = date.getTime();
-      const ampm = hour <= 12 ? "오전" : "오후";
-      const time = " " + ampm + " " + hour + ":" + minute + ":" + second;
       context?.setMessage((message) => {
         return [
           ...message,
           {
             id,
             message: input,
-            date: new Intl.DateTimeFormat("ko-KR").format(date) + time,
-            sendTime: Number(sendTime),
+            ...getDateTime(),
           },
         ];
       });
@@ -256,31 +198,14 @@ function ChatUser2() {
   return (
     <ChatBox>
       <ChatLogWrap>
-        <h2 style={{ marginBottom: "20px", color: "#000" }}>user2</h2>
+        <DivisionUser>{id}</DivisionUser>
         <MsgLog>
           {context?.message.map((msg, index) => (
-            <ChatList
-              key={index}
-              style={
-                id === msg.id
-                  ? { flexDirection: "row-reverse" }
-                  : { justifyContent: "flex-start" }
-              }
-            >
-              <UserName
-                style={
-                  id === msg.id ? { display: "none" } : { display: "block" }
-                }
-              >
+            <ChatList key={index} isEqualId={id === msg.id}>
+              <UserName isEqualId={id === msg.id}>
                 {id === msg.id ? null : msg.id}
               </UserName>
-              <ChatMsg
-                style={
-                  id === msg.id ? { borderRadius: "10px 0 10px 10px" } : {}
-                }
-              >
-                {msg.message}
-              </ChatMsg>
+              <ChatMsg isEqualId={id === msg.id}>{msg.message}</ChatMsg>
               <ChatDate>{msg.date}</ChatDate>
               {id === msg.id && (
                 <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
@@ -308,6 +233,10 @@ const ChatBox = styled.div`
   border-radius: 5px;
   background-color: #fff;
 `;
+const DivisionUser = styled.h2`
+  margin-bottom: 20px;
+  color: #000;
+`;
 const WrapInput = styled.div`
   display: flex;
   width: 698px;
@@ -333,11 +262,10 @@ const WrapInputBox = styled.div`
 const InputBox = styled.textarea`
   width: 600px;
   border: none;
-  background-color: #ddd;
+  background-color: #eee;
   box-sizing: border-box;
   height: 80px;
   outline: none;
-  text-indent: 10px;
 `;
 const MsgLog = styled.ul`
   height: 500px;
@@ -357,8 +285,10 @@ const ChatList = styled.li`
   justify-content: flex-srart;
   gap: 15px;
   align-items: baseline;
+  flex-direction: ${(props) => (props.isEqualId ? "row-reverse" : "row")};
+  justify-content: ${(props) => (props.isEqualId ? "flex-start" : "normal")};
 `;
-const ChatMsg = styled.div`
+const ChatMsg = styled.pre`
   background-color: #eee;
   line-height: 35px;
   padding: 5px 10px;
@@ -366,7 +296,10 @@ const ChatMsg = styled.div`
   word-break: break-all;
   max-width: 380px;
   color: #222;
-  border-radius: 0px 10px 10px 10px;
+  border-radius: ${(props) =>
+    props.isEqualId ? "10px 0 10px 10px" : "0 10px 10px 10px"};
+  white-space: pre-wrap;
+  word-break: break-all;
 `;
 const ChatDate = styled.div`
   font-size: 11px;
@@ -391,6 +324,7 @@ const UserName = styled.div`
   height: 35px;
   border: solid 1px #eee;
   border-radius: 50%;
+  display: ${(props) => (props.isEqualId ? "none" : "block")};
 `;
 const SubmitBtn = styled.button`
   width: 70px;
@@ -407,3 +341,5 @@ const ChatLogWrap = styled.div`
   padding: 20px;
   height: 600px;
 `;
+//   //a ?? b : a가 null, undefined면 b를 반환 아니면 a를 반환
+//   //null, undefined만 체크

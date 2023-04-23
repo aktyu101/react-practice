@@ -142,14 +142,7 @@ function ChatUser1() {
               >
                 {id === msg.id ? null : msg.id}
               </UserName>
-              <ChatMsg
-                isEqualId={id === msg.id}
-                style={
-                  id === msg.id ? { borderRadius: "10px 0 10px 10px" } : {}
-                }
-              >
-                {msg.message}
-              </ChatMsg>
+              <ChatMsg isEqualId={id === msg.id}>{msg.message}</ChatMsg>
               <ChatDate>{msg.date}</ChatDate>
               {id === msg.id && (
                 <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
@@ -247,13 +240,7 @@ function ChatUser2() {
               >
                 {id === msg.id ? null : msg.id}
               </UserName>
-              <ChatMsg
-                style={
-                  id === msg.id ? { borderRadius: "10px 0 10px 10px" } : {}
-                }
-              >
-                {msg.message}
-              </ChatMsg>
+              <ChatMsg isEqualId={id === msg.id}>{msg.message}</ChatMsg>
               <ChatDate>{msg.date}</ChatDate>
               {id === msg.id && (
                 <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
