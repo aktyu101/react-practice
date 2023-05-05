@@ -1,42 +1,12 @@
-import {
-  useState,
-  createContext,
-  useContext,
-  useId,
-  useEffect,
-  useRef, //state가 변경되어 다시 돌더라도 초기화하지 않음, 값 유지 o, 렌더링 x
-} from "react";
+import { useState, createContext, useContext, useId, useEffect } from "react";
 import styled from "@emotion/styled";
 import { getDateTime } from "../../utils/dateUtils";
+import { useChat } from "./useChat";
 
-const ChatContext = createContext(null);
+export const ChatContext = createContext(null);
 
 export default function Chat() {
   const [message, setMessage] = useState([]);
-  const pressedKeys = useRef(new Set());
-
-  const onKeyDown = (event, input, id) => {
-    console.log("event keycode", event.keyCode);
-    pressedKeys.current.add(event.keyCode);
-    console.log("pressedkeycode", pressedKeys.current); //set은 중복값을 만들지 않음
-    if (
-      pressedKeys.current.has(16) &&
-      pressedKeys.current.has(13) &&
-      input.trim() !== ""
-    ) {
-      console.log("key event", event.target.value);
-      setMessage((message) => {
-        return [
-          ...message,
-          {
-            id,
-            message: event.target.value,
-            ...getDateTime(),
-          },
-        ];
-      });
-    }
-  };
 
   return (
     <>
@@ -48,7 +18,7 @@ export default function Chat() {
           gap: "10px",
         }}
       >
-        <ChatContext.Provider value={{ message, setMessage, onKeyDown }}>
+        <ChatContext.Provider value={{ message, setMessage }}>
           <ChatUser1 />
           <ChatUser2 />
           {/* <ChatUser3 /> */}
@@ -59,47 +29,12 @@ export default function Chat() {
 }
 
 function ChatUser1() {
-  const id = useId();
-  const context = useContext(ChatContext);
-  const [input, setInput] = useState("");
-  const pressedKeys = useRef(new Set());
+  const { id, input, onChange, onKeyDown, onKeyUp, context, onSubmit } =
+    useChat();
 
-  // const onChange = (event) => {
-  //   context?.setMessage(event.target.value);
-  // };
   useEffect(() => {
     console.log(context?.message);
   }, [context?.message]);
-
-  const onKeyDown = (event) => {
-    context?.onKeyDown(event, input, id); //optional changing 실행은 안시키지만 에러는 발생하지 않음
-    setInput("");
-  };
-  //고차함수
-  const onKeyUp = (event) => {
-    console.log("onkeyup", event.keyCode);
-    pressedKeys.current.delete(event.keyCode); //delete 같은 값이 있으면 지움
-  };
-
-  const onSubmit = (event) => {
-    if (input.trim() !== "") {
-      context?.setMessage((message) => {
-        return [
-          ...message,
-          {
-            id,
-            message: input,
-            ...getDateTime(),
-          },
-        ];
-      });
-      setInput("");
-    }
-  };
-
-  const onChange = (event) => {
-    setInput(event.target.value);
-  };
 
   const onDelete = (index, message) => {
     const date = new Date();
@@ -127,19 +62,8 @@ function ChatUser1() {
         <h2 style={{ marginBottom: "20px", color: "#bb2649" }}>user1</h2>
         <MsgLog>
           {context?.message.map((msg, index) => (
-            <ChatList
-              key={index}
-              style={
-                id === msg.id
-                  ? { flexDirection: "row-reverse" }
-                  : { justifyContent: "flex-start" }
-              }
-            >
-              <UserName
-                style={
-                  id === msg.id ? { display: "none" } : { display: "block" }
-                }
-              >
+            <ChatList key={index} isEqualId={id === msg.id}>
+              <UserName isEqualId={id === msg.id}>
                 {id === msg.id ? null : msg.id}
               </UserName>
               <ChatMsg isEqualId={id === msg.id}>{msg.message}</ChatMsg>
@@ -167,37 +91,9 @@ function ChatUser1() {
 }
 
 function ChatUser2() {
-  const id = useId();
-  const context = useContext(ChatContext);
-  const [input, setInput] = useState("");
-  // const onChange = (event) => {
-  //   context?.setMessage(event.target.value);
-  // };
-  const onKeyDown = (event) => {
-    context?.onKeyDown(event, input, id); //optional changing 실행은 안시키지만 에러는 발생하지 않음
-    setInput("");
-  };
-  const onKeyUp = (event) => {
-    console.log("onkeyup", event.keyCode);
-  };
-  const onSubmit = (event) => {
-    if (input.trim() !== "") {
-      context?.setMessage((message) => {
-        return [
-          ...message,
-          {
-            id,
-            message: input,
-            ...getDateTime(),
-          },
-        ];
-      });
-      setInput("");
-    }
-  };
-  const onChange = (event) => {
-    setInput(event.target.value);
-  };
+  const { id, input, onChange, onKeyDown, onKeyUp, context, onSubmit } =
+    useChat();
+
   const onDelete = (index, message) => {
     const date = new Date();
     const deleteTime = date.getTime();
@@ -225,19 +121,8 @@ function ChatUser2() {
         <h2 style={{ marginBottom: "20px", color: "#bb2649" }}>user2</h2>
         <MsgLog>
           {context?.message.map((msg, index) => (
-            <ChatList
-              key={index}
-              style={
-                id === msg.id
-                  ? { flexDirection: "row-reverse" }
-                  : { justifyContent: "flex-start" }
-              }
-            >
-              <UserName
-                style={
-                  id === msg.id ? { display: "none" } : { display: "block" }
-                }
-              >
+            <ChatList key={index} isEqualId={id === msg.id}>
+              <UserName isEqualId={id === msg.id}>
                 {id === msg.id ? null : msg.id}
               </UserName>
               <ChatMsg isEqualId={id === msg.id}>{msg.message}</ChatMsg>
@@ -347,13 +232,14 @@ const ChatList = styled.li`
   justify-content: flex-srart;
   gap: 15px;
   align-items: baseline;
+  flex-direction: ${(props) => (props.isEqualId ? "row-reverse" : "row")};
+  justify-content: ${(props) => (props.isEqualId ? "flex-start" : "normal")};
 `;
 const ChatMsg = styled.pre`
   background-color: #eee;
   line-height: 15px;
   padding: 5px 10px;
   margin-bottom: 5px;
-  word-break: break-all;
   max-width: 380px;
   color: #222;
   border-radius: ${(props) =>
@@ -384,6 +270,7 @@ const UserName = styled.div`
   height: 35px;
   border: solid 1px #eee;
   border-radius: 50%;
+  display: ${(props) => (props.isEqualId ? "none" : "block")};
 `;
 const SubmitBtn = styled.button`
   width: 70px;
