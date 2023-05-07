@@ -57,6 +57,27 @@ export const useChat = () => {
     setInput(event.target.value);
   };
 
+  const onDelete = (index, message) => {
+    const date = new Date();
+    const deleteTime = date.getTime();
+    const indexNumber = Number(index);
+    console.log(deleteTime >= context?.message[indexNumber].sendTime + 5000);
+    if (deleteTime >= context?.message[indexNumber].sendTime + 5000) {
+      context?.setMessage((message) => {
+        const msg = [...message];
+        msg.splice(index, 1);
+        return msg;
+      });
+    } else {
+      return alert(
+        Math.floor(
+          (deleteTime - (context?.message[indexNumber].sendTime + 5000)) *
+            -0.001
+        ) + "초 뒤 삭제 가능합니다."
+      );
+    }
+  };
+
   return {
     id,
     input,
@@ -66,6 +87,7 @@ export const useChat = () => {
     onSubmit,
     onChange,
     context,
+    onDelete,
   };
 };
 
