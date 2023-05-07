@@ -14,36 +14,39 @@ export default function ChatLayout(props) {
   } = useChat();
 
   return (
-    <ChatBox>
-      <ChatLogWrap>
-        <h2 style={{ marginBottom: "20px", color: "#bb2649" }}>{id}</h2>
-        <MsgLog>
-          {context?.message.map((msg, index) => (
-            <ChatList key={index} isEqualId={id === msg.id}>
-              <UserName isEqualId={id === msg.id}>
-                {id === msg.id ? null : msg.id}
-              </UserName>
-              <ChatMsg isEqualId={id === msg.id}>{msg.message}</ChatMsg>
-              <ChatDate>{msg.date}</ChatDate>
-              {id === msg.id && (
-                <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
-              )}
-            </ChatList>
-          ))}
-        </MsgLog>
-        <WrapInput>
-          <WrapInputBox>
-            <InputBox
-              onKeyDown={onKeyDown}
-              onKeyUp={onKeyUp}
-              value={input}
-              onChange={onChange}
-            />
-          </WrapInputBox>
-          <SubmitBtn onClick={onSubmit}>전송</SubmitBtn>
-        </WrapInput>
-      </ChatLogWrap>
-    </ChatBox>
+    <>
+      <ChatLists>{id}</ChatLists>
+      <ChatBox>
+        <ChatLogWrap>
+          <h2 style={{ marginBottom: "20px", color: "#bb2649" }}>{id}</h2>
+          <MsgLog>
+            {context?.message.map((msg, index) => (
+              <ChatList key={index} isEqualId={id === msg.id}>
+                <UserName isEqualId={id === msg.id}>
+                  {id === msg.id ? null : msg.id}
+                </UserName>
+                <ChatMsg isEqualId={id === msg.id}>{msg.message}</ChatMsg>
+                <ChatDate>{msg.date}</ChatDate>
+                {id === msg.id && (
+                  <DelBtn onClick={() => onDelete(index)}>X</DelBtn>
+                )}
+              </ChatList>
+            ))}
+          </MsgLog>
+          <WrapInput>
+            <WrapInputBox>
+              <InputBox
+                onKeyDown={onKeyDown}
+                onKeyUp={onKeyUp}
+                value={input}
+                onChange={onChange}
+              />
+            </WrapInputBox>
+            <SubmitBtn onClick={onSubmit}>전송</SubmitBtn>
+          </WrapInput>
+        </ChatLogWrap>
+      </ChatBox>
+    </>
   );
 }
 
@@ -160,4 +163,9 @@ const ChatLogWrap = styled.div`
   box-sizing: border-box;
   padding: 20px;
   height: 600px;
+`;
+const ChatLists = styled.div`
+  width: 200px;
+  background-color: #eee;
+  height: 500px;
 `;
