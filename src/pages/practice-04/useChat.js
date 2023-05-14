@@ -14,11 +14,11 @@ export const useChat = () => {
     }
 
     pressedKeys.current.add(event.keyCode);
-
     if (pressedKeys.current.has(KeyCode.enter)) {
       //shift 없음
+      event.preventDefault();
       if (pressedKeys.current.has(KeyCode.shift)) {
-        console.log("shift 있음");
+        // console.log("shift 있음");
         context?.setMessage((message) => {
           return [
             ...message,

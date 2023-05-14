@@ -17,6 +17,7 @@ export default function Chat() {
           justifyContent: "center",
           gap: "10px",
           width: "100%",
+          flexDirection: "column",
         }}
       >
         <ChatContext.Provider value={{ message, setMessage }}>

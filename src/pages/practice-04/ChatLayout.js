@@ -15,10 +15,10 @@ export default function ChatLayout(props) {
 
   return (
     <>
-      <ChatLists>{id}</ChatLists>
       <ChatBox>
+        <ChatLists>{id}</ChatLists>
         <ChatLogWrap>
-          <h2 style={{ marginBottom: "20px", color: "#bb2649" }}>{id}</h2>
+          <h2 style={{ marginBottom: "20px", color: "#303030" }}>{id}</h2>
           <MsgLog>
             {context?.message.map((msg, index) => (
               <ChatList key={index} isEqualId={id === msg.id}>
@@ -51,13 +51,15 @@ export default function ChatLayout(props) {
 }
 
 const ChatBox = styled.div`
-  width: 700px;
+  width: 1000px;
   border: solid 1px #ddd;
   height: 700px;
   position: relative;
   box-sizing: border-box;
   border-radius: 5px;
   background-color: #fff;
+  margin: 0 auto;
+  display: flex;
 `;
 const WrapInput = styled.div`
   display: flex;
@@ -70,13 +72,13 @@ const WrapInput = styled.div`
   left: 0;
   box-sizing: border-box;
   background-color: #eee;
+  transform: translateX(300px);
 `;
 const WrapInputBox = styled.div`
   width: 600px;
   height: 100%;
   box-sizing: border-box;
   line-height: 45px;
-  background: #eee;
   outline: none;
   border: none;
   display: inline-block;
@@ -111,6 +113,7 @@ const ChatList = styled.li`
   align-items: baseline;
   flex-direction: ${(props) => (props.isEqualId ? "row-reverse" : "row")};
   justify-content: ${(props) => (props.isEqualId ? "flex-start" : "normal")};
+  margin-top: 5px;
 `;
 const ChatMsg = styled.pre`
   background-color: #eee;
@@ -154,7 +157,7 @@ const SubmitBtn = styled.button`
   text-align: center;
   height: 33px;
   border: none;
-  background-color: #bb2649;
+  background-color: #303030;
   color: #fff;
   cursor: pointer;
 `;
@@ -165,7 +168,10 @@ const ChatLogWrap = styled.div`
   height: 600px;
 `;
 const ChatLists = styled.div`
-  width: 200px;
+  width: 300px;
   background-color: #eee;
-  height: 500px;
+  height: 700px;
+  display: block;
+  box-sizing: border-box;
+  padding: 20px;
 `;
