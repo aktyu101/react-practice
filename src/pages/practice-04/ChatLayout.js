@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useChat } from "./useChat";
 
-export default function ChatLayout(props) {
+export default function ChatLayout() {
   const {
     id,
     input,

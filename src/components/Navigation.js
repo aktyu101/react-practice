@@ -32,6 +32,9 @@ export default function Navigation() {
             <Link to="/counter" className="nav_tab">
               counter
             </Link>
+            <Link to="/scroll" className="nav_tab">
+              scroll
+            </Link>
           </nav>
         </div>
       </header>

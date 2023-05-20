@@ -13,6 +13,7 @@ import Chat from "./pages/practice-04/Chat";
 import Chat2 from "./pages/practice-04/Chat2";
 import Counter from "./pages/practice-04/Counter";
 import styled from "@emotion/styled";
+import Scroll from "./pages/practice-05/Scroll";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: "/counter",
         element: <Counter />,
+      },
+      {
+        path: "/scroll",
+        element: <Scroll />,
       },
     ],
   },
